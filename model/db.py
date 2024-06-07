@@ -52,6 +52,17 @@ class Sentence(Base):
         self.text = text
         self.amplitude = amplitude
 
+class Rating(Base):
+    __tablename__ = 'ratings'
+
+    id = Column('id', Integer, primary_key = True)
+    plausibility = Column('plausibility', FLOAT)
+    source_width = Column('source_width', FLOAT)
+
+    def __init__(self, plausibility: float, source_width: float):
+        self.plausibility = plausibility
+        self.source_width = source_width
+
 class User(Base):
     __tablename__ = 'users'
 
