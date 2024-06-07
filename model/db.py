@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, CHAR, VARCHAR, DATE
+from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, CHAR, VARCHAR, DATE, FLOAT
 from sqlalchemy.orm import sessionmaker, declarative_base
 import datetime
 
@@ -10,6 +10,21 @@ def initialize_db():
     engine = create_engine('sqlite:///model/manip_directivite.db', echo = True)
     Base.metadata.create_all(bind = engine)
     Session = sessionmaker(bind = engine)
+
+class Room(Base):
+    __tablename__ = 'rooms'
+
+    id = Column('id', Integer, primary_key = True)
+    name = Column('name', VARCHAR(200))
+    rt_60 = Column('rt_60', FLOAT)
+
+    def __init__(self, name: str, rt_60: float):
+        self.name = name
+        self.rt_60 = rt_60
+
+def create_new_room(name: str, rt_60: float):
+    room = Room(name, rt_60)
+    add_to_db(room)
 
 class User(Base):
     __tablename__ = 'users'
