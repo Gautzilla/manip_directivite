@@ -2,6 +2,7 @@ from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, CHAR,
 from sqlalchemy.orm import sessionmaker, declarative_base
 import datetime
 
+SENTENCES_CSV_FILE = r'data\sentences.csv'
 Base = declarative_base()
 Session = None
 
@@ -10,6 +11,13 @@ def initialize_db():
     engine = create_engine('sqlite:///model/manip_directivite.db', echo = True)
     Base.metadata.create_all(bind = engine)
     Session = sessionmaker(bind = engine)
+    import_data()
+
+def import_data():
+    # POPULATE DB WITH CONSTANT DATA (sentences.csv)
+    # MAYBE ROOM, CONDITIONS AND SENTENCE SHOULD BE LINKED IN A DEDICACTED TABLE, E.G. 'independant_variables'?
+    pass
+
 
 class Room(Base):
     __tablename__ = 'rooms'
@@ -18,13 +26,10 @@ class Room(Base):
     name = Column('name', VARCHAR(200))
     rt_60 = Column('rt_60', FLOAT)
 
-    def __init__(self, name: str, rt_60: float):
+    def __init__(self, id: Integer, name: str, rt_60: float):
+        self.id = id
         self.name = name
         self.rt_60 = rt_60
-
-def create_new_room(name: str, rt_60: float):
-    room = Room(name, rt_60)
-    add_to_db(room)
 
 class Condition(Base):
     __tablename__ = 'conditions'
@@ -35,7 +40,8 @@ class Condition(Base):
     movement = Column('movement', BOOLEAN)
     source = Column('source', VARCHAR(50))
 
-    def __init__(self, distance: int, angle: str, movement: bool, source: str):
+    def __init__(self, id: int, distance: int, angle: str, movement: bool, source: str):
+        self.id = id
         self.distance = distance
         self.angle = angle
         self.movement = movement
@@ -46,9 +52,10 @@ class Sentence(Base):
 
     id = Column('id', Integer, primary_key = True)
     text = Column('text', VARCHAR(500))
-    amplitude = Column('text', VARCHAR(50))
+    amplitude = Column('amplitude', VARCHAR(50))
 
-    def __init__(self, text: str, amplitude: str):
+    def __init__(self, id: int, text: str, amplitude: str):
+        self.id = id
         self.text = text
         self.amplitude = amplitude
 
