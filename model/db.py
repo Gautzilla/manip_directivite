@@ -41,6 +41,17 @@ class Condition(Base):
         self.movement = movement
         self.source = source
 
+class Sentence(Base):
+    __tablename__ = 'sentences'
+
+    id = Column('id', Integer, primary_key = True)
+    text = Column('text', VARCHAR(500))
+    amplitude = Column('text', VARCHAR(50))
+
+    def __init__(self, text: str, amplitude: str):
+        self.text = text
+        self.amplitude = amplitude
+
 class User(Base):
     __tablename__ = 'users'
 
