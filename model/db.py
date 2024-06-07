@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, CHAR, VARCHAR, DATE, FLOAT
+from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, CHAR, VARCHAR, DATE, FLOAT, BOOLEAN
 from sqlalchemy.orm import sessionmaker, declarative_base
 import datetime
 
@@ -25,6 +25,21 @@ class Room(Base):
 def create_new_room(name: str, rt_60: float):
     room = Room(name, rt_60)
     add_to_db(room)
+
+class Condition(Base):
+    __tablename__ = 'conditions'
+
+    id = Column('id', Integer, primary_key = True)
+    distance = Column('distance', Integer)
+    angle = Column('angle', VARCHAR(50))
+    movement = Column('movement', BOOLEAN)
+    source = Column('source', VARCHAR(50))
+
+    def __init__(self, distance: int, angle: str, movement: bool, source: str):
+        self.distance = distance
+        self.angle = angle
+        self.movement = movement
+        self.source = source
 
 class User(Base):
     __tablename__ = 'users'
