@@ -13,7 +13,14 @@ def initialize_db():
     engine = create_engine(DATABASE_PATH, echo = True)
     Base.metadata.create_all(bind = engine)
     Session = sessionmaker(bind = engine)
+    add_rooms()
     import_data()
+
+def add_rooms():
+    clous = Room(0, 'CLOUS', 0.5)
+    suaps = Room(1, 'SUAPS', 2.)
+    for room in [clous, suaps] :
+        add_to_db(room)
 
 def import_data():
     recordings = pd.read_csv(SENTENCES_CSV_FILE)
