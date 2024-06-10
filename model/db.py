@@ -3,12 +3,13 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 import datetime
 
 SENTENCES_CSV_FILE = r'data\sentences.csv'
+DATABASE_PATH = 'sqlite:///model/manip_directivite.db'
 Base = declarative_base()
 Session = None
 
 def initialize_db():    
     global Session    
-    engine = create_engine('sqlite:///model/manip_directivite.db', echo = True)
+    engine = create_engine(DATABASE_PATH, echo = True)
     Base.metadata.create_all(bind = engine)
     Session = sessionmaker(bind = engine)
     import_data()
@@ -16,8 +17,18 @@ def initialize_db():
 def import_data():
     # POPULATE DB WITH CONSTANT DATA (sentences.csv)
     # MAYBE ROOM, CONDITIONS AND SENTENCE SHOULD BE LINKED IN A DEDICACTED TABLE, E.G. 'independant_variables'?
+
     pass
 
+class Trial(Base):
+    __tablename__ = 'trials'
+
+    id = Column('id', Integer, primary_key = True)
+    index = Column('index', Integer)
+    repetition = Column('repetition', Integer)
+    user_id = Column('user_id', Integer)
+    independant_variable_id = Column('independant_user_id', Integer)
+    rating_id = Column('rating_id', Integer)
 
 class Room(Base):
     __tablename__ = 'rooms'
