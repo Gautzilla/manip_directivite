@@ -37,6 +37,7 @@ class Trial(Base):
     user_id = Column('user_id', Integer)
     independant_variable_id = Column('independant_user_id', Integer)
     rating_id = Column('rating_id', Integer)
+    audio_file = Column('audio_file', VARCHAR(500))
 
 class Room(Base):
     __tablename__ = 'rooms'
