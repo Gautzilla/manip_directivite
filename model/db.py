@@ -38,12 +38,17 @@ def add_conditions():
         for source, distance, angle in product(Source, Distance, Angle):
             condition = Condition(distance = distance.value, angle = angle.value, movement = movement, source = source.value)
             add_to_db(condition)
-    
+
+def add_sentences(recordings_df):
+    sentences = set((recording.loc['Phrase'], recording.loc['T']) for recording in [r[1] for r in recordings_df.iterrows()])
+    existing_sentences = get_full_content(Sentence)
+    if (len(existing_sentences) == 0):
+        for sentence, amplitude in sentences:
+            add_to_db(Sentence(sentence, amplitude))
 
 def import_data():
     recordings = pd.read_csv(SENTENCES_CSV_FILE)
-    recordings.head()
-    pass
+    add_sentences(recordings)    
 
 class IndependantVariable(Base):
     __tablename__ = 'independant_variables'
@@ -111,8 +116,7 @@ class Sentence(Base):
     text = Column('text', VARCHAR(500))
     amplitude = Column('amplitude', VARCHAR(50))
 
-    def __init__(self, id: int, text: str, amplitude: str):
-        self.id = id
+    def __init__(self, text: str, amplitude: str):
         self.text = text
         self.amplitude = amplitude
 
