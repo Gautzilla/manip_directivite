@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, CHAR, VARCHAR, DATE, FLOAT, BOOLEAN
 from sqlalchemy.orm import sessionmaker, declarative_base
 import datetime
+import pandas as pd
 
 SENTENCES_CSV_FILE = r'data\sentences.csv'
 DATABASE_PATH = 'sqlite:///model/manip_directivite.db'
@@ -15,18 +16,17 @@ def initialize_db():
     import_data()
 
 def import_data():
-    # POPULATE DB WITH CONSTANT DATA (sentences.csv)
-    # MAYBE ROOM, CONDITIONS AND SENTENCE SHOULD BE LINKED IN A DEDICACTED TABLE, E.G. 'independant_variables'?
-
+    recordings = pd.read_csv(SENTENCES_CSV_FILE)
+    recordings.head()
     pass
 
 class IndependantVariable(Base):
     __tablename__ = 'independant_variables'
 
     id = Column('id', Integer, primary_key = True)
-    room_id = Column('room_id', Integer)
-    conditions_id = Column('conditions_id', Integer)
-    sentence_id = Column('sentence_id', Integer)
+    room_id = Column(Integer, ForeignKey('rooms.id'))
+    conditions_id = Column(Integer, ForeignKey('conditions.id'))
+    sentence_id = Column(Integer, ForeignKey('sentences.id'))
 
 class Trial(Base):
     __tablename__ = 'trials'
@@ -34,9 +34,9 @@ class Trial(Base):
     id = Column('id', Integer, primary_key = True)
     index = Column('index', Integer)
     repetition = Column('repetition', Integer)
-    user_id = Column('user_id', Integer)
-    independant_variable_id = Column('independant_user_id', Integer)
-    rating_id = Column('rating_id', Integer)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    independant_variable_id = Column(Integer, ForeignKey('independant_variables.id'))
+    rating_id = Column(Integer, ForeignKey('ratings.id'))
     audio_file = Column('audio_file', VARCHAR(500))
 
 class Room(Base):
