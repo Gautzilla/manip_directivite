@@ -20,6 +20,14 @@ def import_data():
 
     pass
 
+class IndependantVariable(Base):
+    __tablename__ = 'independant_variables'
+
+    id = Column('id', Integer, primary_key = True)
+    room_id = Column('room_id', Integer)
+    conditions_id = Column('conditions_id', Integer)
+    sentence_id = Column('sentence_id', Integer)
+
 class Trial(Base):
     __tablename__ = 'trials'
 
