@@ -2,6 +2,8 @@ from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, CHAR,
 from sqlalchemy.orm import sessionmaker, declarative_base
 import datetime
 import pandas as pd
+from data.independant_variables import Source, Distance, Angle
+from itertools import product
 
 SENTENCES_CSV_FILE = r'data\sentences.csv'
 DATABASE_PATH = 'sqlite:///model/manip_directivite.db'
@@ -14,13 +16,29 @@ def initialize_db():
     Base.metadata.create_all(bind = engine)
     Session = sessionmaker(bind = engine)
     add_rooms()
+    add_conditions()
     import_data()
 
 def add_rooms():
+    existing_rooms = get_full_content(Room)
+    if len(existing_rooms) > 0:
+        return
+    
     clous = Room(0, 'CLOUS', 0.5)
     suaps = Room(1, 'SUAPS', 2.)
     for room in [clous, suaps] :
         add_to_db(room)
+
+def add_conditions():
+    existing_conditions = get_full_content(Condition)
+    if len(existing_conditions) > 0:
+        return
+    
+    for movement in [True, False]:
+        for source, distance, angle in product(Source, Distance, Angle):
+            condition = Condition(distance = distance.value, angle = angle.value, movement = movement, source = source.value)
+            add_to_db(condition)
+    
 
 def import_data():
     recordings = pd.read_csv(SENTENCES_CSV_FILE)
@@ -79,8 +97,8 @@ class Condition(Base):
     movement = Column('movement', BOOLEAN)
     source = Column('source', VARCHAR(50))
 
-    def __init__(self, id: int, distance: int, angle: str, movement: bool, source: str):
-        self.id = id
+    def __init__(self, distance: int, angle: str, movement: bool, source: str):
+        print(f'condition: distance = {distance}, angle = {angle}, movement = {movement}, source = {source}')
         self.distance = distance
         self.angle = angle
         self.movement = movement
@@ -132,7 +150,15 @@ def add_to_db(object):
     try:
         session.add(object)
         session.commit()
-    except:
+    except Exception as e:
         print(f'cant add {object}')
+        print(e)
     finally:
         session.close()
+
+def get_full_content(table):
+    global Session
+    session = Session()
+    results = session.query(table).all()
+    session.close()
+    return results
