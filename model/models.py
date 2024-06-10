@@ -1,54 +1,6 @@
-from sqlalchemy import create_engine, ForeignKey, Column, String, Integer, CHAR, VARCHAR, DATE, FLOAT, BOOLEAN
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy import ForeignKey, Column, String, Integer, CHAR, VARCHAR, DATE, FLOAT, BOOLEAN
 import datetime
-import pandas as pd
-from data.independant_variables import Source, Distance, Angle
-from itertools import product
-
-SENTENCES_CSV_FILE = r'data\sentences.csv'
-DATABASE_PATH = 'sqlite:///model/manip_directivite.db'
-Base = declarative_base()
-Session = None
-
-def initialize_db():    
-    global Session    
-    engine = create_engine(DATABASE_PATH, echo = True)
-    Base.metadata.create_all(bind = engine)
-    Session = sessionmaker(bind = engine)
-    add_rooms()
-    add_conditions()
-    import_data()
-
-def add_rooms():
-    existing_rooms = get_full_content(Room)
-    if len(existing_rooms) > 0:
-        return
-    
-    clous = Room(0, 'CLOUS', 0.5)
-    suaps = Room(1, 'SUAPS', 2.)
-    for room in [clous, suaps] :
-        add_to_db(room)
-
-def add_conditions():
-    existing_conditions = get_full_content(Condition)
-    if len(existing_conditions) > 0:
-        return
-    
-    for movement in [True, False]:
-        for source, distance, angle in product(Source, Distance, Angle):
-            condition = Condition(distance = distance.value, angle = angle.value, movement = movement, source = source.value)
-            add_to_db(condition)
-
-def add_sentences(recordings_df):
-    sentences = set((recording.loc['Phrase'], recording.loc['T']) for recording in [r[1] for r in recordings_df.iterrows()])
-    existing_sentences = get_full_content(Sentence)
-    if (len(existing_sentences) == 0):
-        for sentence, amplitude in sentences:
-            add_to_db(Sentence(sentence, amplitude))
-
-def import_data():
-    recordings = pd.read_csv(SENTENCES_CSV_FILE)
-    add_sentences(recordings)    
+from model import Base
 
 class IndependantVariable(Base):
     __tablename__ = 'independant_variables'
@@ -103,7 +55,6 @@ class Condition(Base):
     source = Column('source', VARCHAR(50))
 
     def __init__(self, distance: int, angle: str, movement: bool, source: str):
-        print(f'condition: distance = {distance}, angle = {angle}, movement = {movement}, source = {source}')
         self.distance = distance
         self.angle = angle
         self.movement = movement
@@ -143,26 +94,3 @@ class User(Base):
         self.first_name = first_name
         self.last_name = last_name
         self.birth_date = birth_date
-
-def create_new_user(first_name: str, last_name: str, birth_date: datetime):
-    user = User(first_name, last_name, birth_date)
-    add_to_db(user)
-
-def add_to_db(object):
-    global Session
-    session = Session()
-    try:
-        session.add(object)
-        session.commit()
-    except Exception as e:
-        print(f'cant add {object}')
-        print(e)
-    finally:
-        session.close()
-
-def get_full_content(table):
-    global Session
-    session = Session()
-    results = session.query(table).all()
-    session.close()
-    return results
