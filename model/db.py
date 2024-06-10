@@ -28,6 +28,11 @@ class IndependantVariable(Base):
     conditions_id = Column(Integer, ForeignKey('conditions.id'))
     sentence_id = Column(Integer, ForeignKey('sentences.id'))
 
+    def __init__(self, room_id, conditions_id, sentence_id):
+        self.room_id = room_id
+        self.conditions_id = conditions_id
+        self.sentence_id = sentence_id
+
 class Trial(Base):
     __tablename__ = 'trials'
 
@@ -38,6 +43,13 @@ class Trial(Base):
     independant_variable_id = Column(Integer, ForeignKey('independant_variables.id'))
     rating_id = Column(Integer, ForeignKey('ratings.id'))
     audio_file = Column('audio_file', VARCHAR(500))
+
+    def __init__(self, index, repetition, user_id, independant_variable_id):
+        self.index = index
+        self.repetition = repetition
+        self.user_id = user_id
+        self.independant_variable_id = independant_variable_id
+        # audio_file path can be created here 
 
 class Room(Base):
     __tablename__ = 'rooms'
@@ -113,5 +125,7 @@ def add_to_db(object):
     try:
         session.add(object)
         session.commit()
+    except:
+        print(f'cant add {object}')
     finally:
         session.close()
