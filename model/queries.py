@@ -1,0 +1,50 @@
+from model.models import Room, Condition, User, Sentence, Recording
+import datetime
+
+def get_room_from_recording(recording: Recording, session) -> Room:
+        return session.query(Room).filter(Room.id == recording.room_id).first()
+
+def get_room_by_attributes(room, session):
+    try:
+        return session.query(Room).filter(Room.name == room.name, Room.rt_60 == room.rt_60).first()
+    except:
+        return None    
+
+def add_room(room: Room, session):
+    session.add(room)
+
+def get_conditions_by_attributes(condition, session):
+    try:
+        return session.query(Condition).filter(Condition.distance == condition.distance, Condition.angle == condition.angle, Condition.movement == condition.movement, Condition.source == condition.source).first()
+    except:
+        return None  
+
+def add_conditions(conditions: Condition, session):
+    session.add(conditions)
+
+def get_conditions_from_recording(recording: Recording, session) -> Condition:
+    return session.query(Condition).filter(Condition.id == recording.conditions_id).first()
+
+def get_sentence_by_attributes(sentence: Sentence, session) -> Sentence:
+    try:
+        return session.query(Sentence).filter(Sentence.text == sentence.text, Sentence.amplitude == sentence.amplitude).first()
+    except:
+        return None 
+
+def add_sentence(sentence: Sentence, session):
+    session.add(sentence)
+
+def get_sentence_from_recording(recording: Recording, session) -> Sentence:
+    return session.query(Sentence).filter(Sentence.id == recording.sentence_id).first()
+
+def add_recording(recording: Recording, session):
+    session.add(recording)
+
+def get_recording_by_attributes(recording: Recording, session) -> Recording:
+    try:
+        return session.query(Recording).filter(Recording.room_id == recording.room_id, Recording.sentence_id == recording.sentence_id, Recording.conditions_id == recording.conditions_id, Recording.repetition == recording.repetition, Recording.rec_repetition == recording.rec_repetition).first()
+    except:
+        return None 
+    
+def get_all_recordings(session) -> list:
+    return session.query(Recording).all()
