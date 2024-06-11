@@ -1,5 +1,8 @@
-from model.models import Room, Condition, User, Sentence, Recordings
+from model.models import Room, Condition, User, Sentence, Recording
 import datetime
+
+def get_room_from_recording(recording: Recording, session) -> Room:
+        return session.query(Room).filter(Room.id == recording.room_id).first()
 
 def get_room_by_attributes(room, session):
     try:
@@ -25,6 +28,9 @@ def add_conditions(conditions, session):
 def get_all_conditions(session):
     return session.query(Condition).all()
 
+def get_conditions_from_recording(recording: Recording, session) -> Condition:
+    return session.query(Condition).filter(Condition.id == recording.conditions_id).first()
+
 def get_sentence_by_attributes(sentence, session):
     try:
         return session.query(Sentence).filter(Sentence.text == sentence.text, Sentence.amplitude == sentence.amplitude).first()
@@ -37,17 +43,20 @@ def add_sentence(sentence, session):
 def get_all_sentences(session):
     return session.query(Sentence).all()
 
+def get_sentence_from_recording(recording: Recording, session) -> Sentence:
+    return session.query(Sentence).filter(Sentence.id == recording.sentence_id).first()
+
 def add_recording(recording, session):
     session.add(recording)
 
-def get_recording_by_attributes(recording: Recordings, session):
+def get_recording_by_attributes(recording: Recording, session):
     try:
-        return session.query(Recordings).filter(Recordings.room_id == recording.room_id, Recordings.sentence_id == recording.sentence_id, Recordings.conditions_id == recording.conditions_id, Recordings.repetition == recording.repetition, Recordings.rec_repetition == recording.rec_repetition).first()
+        return session.query(Recording).filter(Recording.room_id == recording.room_id, Recording.sentence_id == recording.sentence_id, Recording.conditions_id == recording.conditions_id, Recording.repetition == recording.repetition, Recording.rec_repetition == recording.rec_repetition).first()
     except:
         return None 
     
 def get_all_recordings(session):
-    return session.query(Recordings).all()
+    return session.query(Recording).all()
 
 def add_new_user(first_name: str, last_name: str, birth_date: datetime):
     user = User(first_name, last_name, birth_date)

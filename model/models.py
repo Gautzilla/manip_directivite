@@ -2,7 +2,7 @@ from sqlalchemy import ForeignKey, Column, String, Integer, CHAR, VARCHAR, DATE,
 import datetime
 from model import Base
 
-class Recordings(Base):
+class Recording(Base):
     __tablename__ = 'recordings'
 
     id = Column('id', Integer, primary_key = True)
@@ -11,15 +11,20 @@ class Recordings(Base):
     sentence_id = Column(Integer, ForeignKey('sentences.id'))    
     repetition = Column('repetition', Integer)
     rec_repetition = Column('rec_repetition', Integer)
+    rec_repetition_rating = Column('rec_repetition_rating', Integer)
     audio_file = Column('audio_file', VARCHAR(500))
 
-    def __init__(self, room_id, conditions_id, sentence_id, repetition, rec_repetition):
+    def __init__(self, room_id, conditions_id, sentence_id, repetition, rec_repetition, rec_repetition_rating):
         self.room_id = room_id
         self.conditions_id = conditions_id
         self.sentence_id = sentence_id
         self.repetition = repetition
         self.rec_repetition = rec_repetition
+        self.rec_repetition_rating = rec_repetition_rating
         # compute audio file path here
+
+    def set_audio_file(self, file_name):
+        self.audio_file = file_name
 
 class Room(Base):
     __tablename__ = 'rooms'
