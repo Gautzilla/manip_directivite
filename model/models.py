@@ -21,15 +21,12 @@ class Trial(Base):
     id = Column('id', Integer, primary_key = True)
     index = Column('index', Integer)
     repetition = Column('repetition', Integer)
-    user_id = Column(Integer, ForeignKey('users.id'))
     independant_variable_id = Column(Integer, ForeignKey('independant_variables.id'))
-    rating_id = Column(Integer, ForeignKey('ratings.id'))
     audio_file = Column('audio_file', VARCHAR(500))
 
-    def __init__(self, index, repetition, user_id, independant_variable_id):
+    def __init__(self, index, repetition, independant_variable_id):
         self.index = index
         self.repetition = repetition
-        self.user_id = user_id
         self.independant_variable_id = independant_variable_id
         # audio_file path can be created here 
 
@@ -75,12 +72,16 @@ class Rating(Base):
     __tablename__ = 'ratings'
 
     id = Column('id', Integer, primary_key = True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    trial_id = Column(Integer, ForeignKey('trials.id'))
     plausibility = Column('plausibility', FLOAT)
     source_width = Column('source_width', FLOAT)
 
-    def __init__(self, plausibility: float, source_width: float):
+    def __init__(self, plausibility: float, source_width: float, user_id: int, trial_id: int):
         self.plausibility = plausibility
         self.source_width = source_width
+        self.user_id = user_id
+        self.trial_id = trial_id
 
 class User(Base):
     __tablename__ = 'users'
