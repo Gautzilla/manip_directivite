@@ -2,7 +2,7 @@ from sqlalchemy import ForeignKey, Column, String, Integer, CHAR, VARCHAR, DATE,
 import datetime
 from model import Base
 
-class IndependantVariable(Base):
+class IndependantVariables(Base):
     __tablename__ = 'independant_variables'
 
     id = Column('id', Integer, primary_key = True)
