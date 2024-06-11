@@ -1,4 +1,4 @@
-from model.models import Room, Condition, User, Sentence, IndependantVariables
+from model.models import Room, Condition, User, Sentence, Recordings
 import datetime
 
 def get_room_by_attributes(room, session):
@@ -37,17 +37,17 @@ def add_sentence(sentence, session):
 def get_all_sentences(session):
     return session.query(Sentence).all()
 
-def add_independant_variables(independant_variables, session):
-    session.add(independant_variables)
+def add_recording(recording, session):
+    session.add(recording)
 
-def get_independant_variables_by_attributes(independant_variables: IndependantVariables, session):
+def get_recording_by_attributes(recording: Recordings, session):
     try:
-        return session.query(IndependantVariables).filter(IndependantVariables.room_id == independant_variables.room_id, IndependantVariables.sentence_id == independant_variables.sentence_id, IndependantVariables.conditions_id == independant_variables.conditions_id).first()
+        return session.query(Recordings).filter(Recordings.room_id == recording.room_id, Recordings.sentence_id == recording.sentence_id, Recordings.conditions_id == recording.conditions_id, Recordings.repetition == recording.repetition, Recordings.rec_repetition == recording.rec_repetition).first()
     except:
         return None 
     
-def get_all_independant_variables(session):
-    return session.query(IndependantVariables).all()
+def get_all_recordings(session):
+    return session.query(Recordings).all()
 
 def add_new_user(first_name: str, last_name: str, birth_date: datetime):
     user = User(first_name, last_name, birth_date)

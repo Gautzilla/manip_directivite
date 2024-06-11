@@ -2,33 +2,24 @@ from sqlalchemy import ForeignKey, Column, String, Integer, CHAR, VARCHAR, DATE,
 import datetime
 from model import Base
 
-class IndependantVariables(Base):
-    __tablename__ = 'independant_variables'
+class Recordings(Base):
+    __tablename__ = 'recordings'
 
     id = Column('id', Integer, primary_key = True)
     room_id = Column(Integer, ForeignKey('rooms.id'))
     conditions_id = Column(Integer, ForeignKey('conditions.id'))
-    sentence_id = Column(Integer, ForeignKey('sentences.id'))
+    sentence_id = Column(Integer, ForeignKey('sentences.id'))    
+    repetition = Column('repetition', Integer)
+    rec_repetition = Column('rec_repetition', Integer)
+    audio_file = Column('audio_file', VARCHAR(500))
 
-    def __init__(self, room_id, conditions_id, sentence_id):
+    def __init__(self, room_id, conditions_id, sentence_id, repetition, rec_repetition):
         self.room_id = room_id
         self.conditions_id = conditions_id
         self.sentence_id = sentence_id
-
-class Trial(Base):
-    __tablename__ = 'trials'
-
-    id = Column('id', Integer, primary_key = True)
-    index = Column('index', Integer)
-    repetition = Column('repetition', Integer)
-    independant_variable_id = Column(Integer, ForeignKey('independant_variables.id'))
-    audio_file = Column('audio_file', VARCHAR(500))
-
-    def __init__(self, index, repetition, independant_variable_id):
-        self.index = index
         self.repetition = repetition
-        self.independant_variable_id = independant_variable_id
-        # audio_file path can be created here 
+        self.rec_repetition = rec_repetition
+        # compute audio file path here
 
 class Room(Base):
     __tablename__ = 'rooms'
@@ -73,15 +64,15 @@ class Rating(Base):
 
     id = Column('id', Integer, primary_key = True)
     user_id = Column(Integer, ForeignKey('users.id'))
-    trial_id = Column(Integer, ForeignKey('trials.id'))
+    recording_id = Column(Integer, ForeignKey('recordings.id'))
     plausibility = Column('plausibility', FLOAT)
     source_width = Column('source_width', FLOAT)
 
-    def __init__(self, plausibility: float, source_width: float, user_id: int, trial_id: int):
+    def __init__(self, plausibility: float, source_width: float, user_id: int, recording_id: int):
         self.plausibility = plausibility
         self.source_width = source_width
         self.user_id = user_id
-        self.trial_id = trial_id
+        self.recording_id = recording_id
 
 class User(Base):
     __tablename__ = 'users'
