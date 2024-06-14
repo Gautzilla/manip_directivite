@@ -8,5 +8,10 @@ class AppController():
         self.view = AppView()
 
     def initialize_app(self, initialize_db : bool):
+
         if initialize_db:
             self.model.initialize_db()
+            
+        self.view.show_login()
+        
+        self.view.mainloop()
