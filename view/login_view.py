@@ -2,9 +2,9 @@ import customtkinter as ctk
 
 class BirthDate(ctk.CTkFrame):
 
-    year_v: int
-    month_v: int
-    day_v: int
+    year_v = 0
+    month_v = 0
+    day_v = 0
 
     monthes = {'Janvier': 1, 'Février': 2, 'Mars': 3, 'Avril': 4, 'Mai': 5, 'Juin': 6, 'Juillet': 7, 'Août': 8, 'Septembre': 9, 'Octobre': 10, 'Novembre': 11, 'Décembre': 12}
 
@@ -45,11 +45,20 @@ class BirthDate(ctk.CTkFrame):
 
 class LoginView(ctk.CTkFrame):
 
-    def submit(self, birth_date: BirthDate, first_name: ctk.CTkEntry, last_name: ctk.CTkEntry):
+    def submit(self, birth_date: BirthDate, first_name: ctk.CTkEntry, last_name: ctk.CTkEntry):        
+        from controller.login_controller import register_user
+
         day, month, year = birth_date.get_birthdate()
         first_name = first_name.get()
         last_name = last_name.get()
-        pass
+        
+        register_user(first_name = first_name, last_name = last_name, birth_day = day, birth_month = month, birth_year = year, login_view = self)
+
+    def print_validation_message(self, message: str):
+        print('VALIDATION: ' + message)
+
+    def print_error_message(self, message: str):
+        print('ERROR: ' + message)
 
     def __init__(self, master):
         super().__init__(master)

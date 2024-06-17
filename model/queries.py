@@ -48,3 +48,12 @@ def get_recording_by_attributes(recording: Recording, session) -> Recording:
     
 def get_all_recordings(session) -> list:
     return session.query(Recording).all()
+
+def get_user_by_attributes(user: User, session) -> User:
+    try:
+        return session.query(User).filter(User.first_name == user.first_name, User.last_name == user.last_name, User.birth_date == user.birth_date).first()
+    except:
+        return None
+    
+def add_user(user: User, session):
+    session.add(user)
