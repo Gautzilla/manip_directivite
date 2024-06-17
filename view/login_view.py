@@ -23,8 +23,6 @@ class BirthDate(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
 
-        self.day = 0
-
         birthdate_header = ctk.CTkLabel(master = self, text = 'Date de naissance')
         birthdate_header.grid(column = 1, row = 0, padx = 0, pady = 0, sticky = 'new')
 
@@ -55,10 +53,10 @@ class LoginView(ctk.CTkFrame):
         register_user(first_name = first_name, last_name = last_name, birth_day = day, birth_month = month, birth_year = year, login_view = self)
 
     def print_validation_message(self, message: str):
-        print('VALIDATION: ' + message)
+        self.feedback_message.configure(text = message, text_color = '#30693b')
 
     def print_error_message(self, message: str):
-        print('ERROR: ' + message)
+        self.feedback_message.configure(text = message, text_color = '#8d2929')
 
     def __init__(self, master):
         super().__init__(master)
@@ -76,3 +74,6 @@ class LoginView(ctk.CTkFrame):
 
         submit = ctk.CTkButton(master = self, width = 100, text = 'Valider', command = lambda: self.submit(birth_date = birth_date, first_name = first_name, last_name = last_name))
         submit.grid(column = 1, row = 3, padx = 0, pady = (10, 0), sticky = 'new')
+
+        self.feedback_message = ctk.CTkLabel(master = self, text = '')
+        self.feedback_message.grid(column = 1, row = 4, padx = 0, pady = (10, 0), sticky = 'new')
