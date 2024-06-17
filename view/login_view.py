@@ -61,19 +61,19 @@ class LoginView(ctk.CTkFrame):
     def __init__(self, master):
         super().__init__(master)
 
-        self.grid_columnconfigure([0,2], weight = 1)
+        self.grid_rowconfigure([0,6], weight = 1)
 
         first_name = ctk.CTkEntry(master = self, placeholder_text = 'Prénom')
-        first_name.grid(column = 1, row = 0, padx = 40, pady = (10,0), sticky = 'ew')
+        first_name.grid(column = 0, row = 1, columnspan = 3, padx = 40, pady = (10,0), sticky = 'ew')
 
         last_name = ctk.CTkEntry(master = self, placeholder_text = 'Nom')
-        last_name.grid(column = 1, row = 1, padx = 40, pady = (10,0), sticky = 'ew')
+        last_name.grid(column = 0, row = 2, columnspan = 3, padx = 40, pady = (10,0), sticky = 'ew')
 
         birth_date = BirthDate(master = self)
-        birth_date.grid(column = 1, row = 2, padx = 10, pady = (10,0), sticky = 'new')
+        birth_date.grid(column = 0, row = 3, columnspan = 3, padx = 10, pady = (10,0), sticky = 'new')
 
-        submit = ctk.CTkButton(master = self, width = 100, text = 'Valider', command = lambda: self.submit(birth_date = birth_date, first_name = first_name, last_name = last_name))
-        submit.grid(column = 1, row = 3, padx = 0, pady = (10, 0), sticky = 'new')
+        submit = ctk.CTkButton(master = self, width = 70, text = 'Valider', command = lambda: self.submit(birth_date = birth_date, first_name = first_name, last_name = last_name))
+        submit.grid(column = 1, row = 4, padx = 0, pady = (10, 0), sticky = 'n')
 
         self.feedback_message = ctk.CTkLabel(master = self, text = '')
-        self.feedback_message.grid(column = 1, row = 4, padx = 0, pady = (10, 0), sticky = 'new')
+        self.feedback_message.grid(column = 0, columnspan = 3, row = 5, padx = 0, pady = (10, 0), sticky = 'new')
