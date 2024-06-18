@@ -1,7 +1,9 @@
-from model.db_constants_filler import initialize_db
+from controller.app_controller import AppController
+
+controller = AppController()
 
 def main():
-     initialize_db()
+     controller.initialize_app(initialize_db = True)
 
 if __name__ == '__main__':
     main()
