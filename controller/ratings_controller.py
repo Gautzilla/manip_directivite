@@ -1,4 +1,5 @@
 from view.app_view import AppView
+from model.models import Rating, User
 
 class RatingsController():
     def __init__(self, app_controller, app_view: AppView):

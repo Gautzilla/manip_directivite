@@ -1,4 +1,4 @@
-from model.models import Room, Condition, User, Sentence, Recording
+from model.models import Room, Condition, User, Sentence, Recording, Rating
 import datetime
 
 def get_room_from_recording(recording: Recording, session) -> Room:
@@ -57,3 +57,6 @@ def get_user_by_attributes(user: User, session) -> User:
     
 def add_user(user: User, session):
     session.add(user)
+
+def get_completed_ratings_count(user: User, session) -> int:
+    return len(session.query(Rating).filter(Rating.user_id == user.id).all())

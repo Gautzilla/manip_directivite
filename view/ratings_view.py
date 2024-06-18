@@ -5,5 +5,6 @@ class RatingsView(ctk.CTkFrame):
         super().__init__(master)
 
         self.controller = controller
-        
-        
+
+        user = ctk.CTkLabel(master = self, text = 'Cool')
+        user.grid_configure(row = 0, column = 0, padx = 0, pady = 0, sticky = 'new')
