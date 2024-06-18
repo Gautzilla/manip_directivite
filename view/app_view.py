@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from view.login_view import LoginView
+from view.ratings_view import RatingsView
 
 class AppView(ctk.CTk):
 
@@ -21,6 +22,12 @@ class AppView(ctk.CTk):
         self.login_view.grid(column = 1, row = 0, padx = 0, pady = 0, sticky = 'nsew')
 
         return self.login_view
+    
+    def show_ratings(self, controller) -> RatingsView:
+        self.ratings_view = RatingsView(master = self, controller = controller)
+        self.ratings_view.grid(column = 1, row = 0, padx = 0, pady = 0, sticky = 'nsew')
 
-    def show_ratings_view(self):
+        return self.ratings_view
+
+    def close_login_view(self):
         self.login_view.grid_forget()

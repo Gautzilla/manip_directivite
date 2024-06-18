@@ -1,0 +1,2 @@
+class RatingModel():
+    pass

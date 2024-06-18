@@ -1,7 +1,8 @@
 from model.login_model import register_user as register_user_model
+from view.app_view import AppView
 
 class LoginController():
-    def __init__(self, app_controller, app_view):
+    def __init__(self, app_controller, app_view: AppView):
         self.app_view = app_view
         self.app_controller = app_controller
         self.login_view = self.app_view.show_login(controller = self)
