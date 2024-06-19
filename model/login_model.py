@@ -3,7 +3,7 @@ from model.models import User
 from datetime import date
 from model import Session
 
-def register_user(first_name: str, last_name: str, birth_day: int, birth_month: int, birth_year: int) -> User:
+def register_user(first_name: str, last_name: str, birth_day: int, birth_month: int, birth_year: int) -> int:
     
     if len(first_name) == 0:
         raise Exception('Veuillez entrer un prénom.')
@@ -22,8 +22,9 @@ def register_user(first_name: str, last_name: str, birth_day: int, birth_month: 
             raise Exception('Cet utilisateur a déjà été enregistré.')
 
         add_user(user = user, session = session)
-
         session.commit()
 
-    return user
+        user_id = user.id
+
+    return user_id
         

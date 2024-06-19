@@ -9,9 +9,9 @@ class LoginController():
 
     def register_user(self, first_name: str, last_name: str, birth_day: int, birth_month: int, birth_year: int):
         try: 
-            user = register_user_model(first_name = first_name, last_name = last_name, birth_day = birth_day, birth_month = birth_month, birth_year = birth_year)
+            user_id = register_user_model(first_name = first_name, last_name = last_name, birth_day = birth_day, birth_month = birth_month, birth_year = birth_year)
         except Exception as e:
             self.login_view.print_error_message(e.args[0])
         else:
             self.login_view.print_validation_message('Utilisateur créé.')
-            self.app_controller.complete_user_registration(user)
+            self.app_controller.complete_user_registration(user_id)

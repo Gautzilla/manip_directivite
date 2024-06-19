@@ -2,8 +2,6 @@ from model.app_model import AppModel
 from view.app_view import AppView
 from controller.login_controller import LoginController
 from controller.ratings_controller import RatingsController
-from model.models import User
-from model import Session
 
 
 class AppController():
@@ -21,6 +19,7 @@ class AppController():
         
         self.view.mainloop()
     
-    def complete_user_registration(self, user: User):
+    def complete_user_registration(self, user_id: int):
+        self.user_id = user_id
         self.view.close_login_view()
-        ratings_controller = RatingsController(app_controller = self, app_view = self.view)
+        ratings_controller = RatingsController(app_controller = self, app_view = self.view, user_id = self.user_id)
