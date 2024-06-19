@@ -72,12 +72,14 @@ class Rating(Base):
     recording_id = Column(Integer, ForeignKey('recordings.id'))
     plausibility = Column('plausibility', FLOAT)
     source_width = Column('source_width', FLOAT)
+    timbre = Column('timbre', FLOAT)
 
-    def __init__(self, plausibility: float, source_width: float, user_id: int, recording_id: int):
+    def __init__(self, plausibility: float, source_width: float, timbre: float, user_id: int, recording_id: int):
         self.plausibility = plausibility
         self.source_width = source_width
         self.user_id = user_id
         self.recording_id = recording_id
+        self.timbre = timbre
 
 class User(Base):
     __tablename__ = 'users'

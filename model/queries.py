@@ -68,3 +68,6 @@ def get_unrated_recordings(user_id: int, session) -> list:
 
 def get_recording(id, session) -> Recording:
     return session.query(Recording).filter(Recording.id == id).first()
+
+def write_ratings(rating, session):
+    session.add(rating)
