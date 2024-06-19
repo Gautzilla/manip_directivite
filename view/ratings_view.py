@@ -5,7 +5,6 @@ class Rating(ctk.CTkFrame):
         super().__init__(master)
 
         self.attribute_name = attribute_name
-        self.score = .5
 
         self.grid_columnconfigure((0,2), weight = 1)
 
@@ -17,6 +16,9 @@ class Rating(ctk.CTkFrame):
 
     def get_score(self) -> float:
         return self.slider.get()
+    
+    def reset(self):
+        self.slider.set(.5)
 
 class RatingsView(ctk.CTkFrame):
     def __init__(self, master, controller):
@@ -40,3 +42,7 @@ class RatingsView(ctk.CTkFrame):
 
     def validate(self):
         self.controller.register_rating(ratings = tuple([slider.get_score() for slider in [self.timbre_rating, self.source_width_rating, self.plausibility_rating]]))
+
+    def reset_sliders(self):
+        for slider in (self.timbre_rating, self.source_width_rating, self.plausibility_rating):
+            slider.reset()

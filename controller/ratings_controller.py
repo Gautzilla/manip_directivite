@@ -17,5 +17,5 @@ class RatingsController():
 
     def register_rating(self, ratings: tuple):
         write_ratings(ratings, self.user_id, self.recording_id)
-        print(f'User {self.user_id} recording {self.recording_id}: {' '.join([str(rating) for rating in ratings])}')
+        self.ratings_view.reset_sliders()
         self.load_next_recording()
