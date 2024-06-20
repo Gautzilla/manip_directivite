@@ -9,7 +9,7 @@ class LoginController():
         self.login_view = self.app_view.show_login(controller = self, users = users)
 
     def load_session(self, user_id):
-        pass
+        self.app_controller.complete_user_registration(user_id)
 
     def register_user(self, first_name: str, last_name: str, birth_day: int, birth_month: int, birth_year: int):
         try: 
