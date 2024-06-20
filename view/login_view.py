@@ -40,11 +40,33 @@ class BirthDate(ctk.CTkFrame):
         year.grid(column = 2, row = 1, padx=10, pady = 10, sticky = 'ew')
         year.set('Année')
 
+class LoadSessionView(ctk.CTkFrame):
+    def __init__(self, master, controller, users: dict):
+        super().__init__(master)
+
+        self.grid_columnconfigure((0,2), weight = 1)
+
+        self.users = users
+        self.selected_user = ctk.StringVar(value = '')
+
+        self.controller = controller
+
+        self.user_names = ctk.CTkOptionMenu(master = self, width = 200, values = list(users.keys()), variable = self.selected_user, command = self.activate_button)
+        self.user_names.grid(column = 1, row = 0, padx = 10, pady = (10, 0), sticky = 'new')
+
+        self.recall_user = ctk.CTkButton(master = self, width = 100, text = 'Charger Session', command = self.load_session, state = 'disabled')
+        self.recall_user.grid(column = 1, row = 1, padx = 10, pady = 10, sticky = 's')
+
+    def activate_button(self, user):
+        self.recall_user.configure(state = 'normal')
+
+    def load_session(self):
+        user_id = self.users[self.selected_user.get()]
+        self.controller.load_session(user_id)
 
 class LoginView(ctk.CTkFrame):
 
     def submit(self, birth_date: BirthDate, first_name: ctk.CTkEntry, last_name: ctk.CTkEntry):  
-
         day, month, year = birth_date.get_birthdate()
         first_name = first_name.get()
         last_name = last_name.get()
@@ -57,10 +79,11 @@ class LoginView(ctk.CTkFrame):
     def print_error_message(self, message: str):
         self.feedback_message.configure(text = message, text_color = '#8d2929')
 
-    def __init__(self, master, controller):
+    def __init__(self, master, controller, users):
         super().__init__(master)
 
         self.controller = controller
+        self.users = users
 
         self.grid_rowconfigure([0,6], weight = 1)
 
@@ -79,5 +102,5 @@ class LoginView(ctk.CTkFrame):
         self.feedback_message = ctk.CTkLabel(master = self, text = '')
         self.feedback_message.grid(column = 0, columnspan = 3, row = 5, padx = 0, pady = (10, 0), sticky = 'new')
 
-        self.recall_user = ctk.CTkButton(master = self, width = 70, text = 'Reprendre Session')
-        self.recall_user.grid(column = 1, row = 6, padx = 10, pady = 10, sticky = 'ews')
+        self.load_session = LoadSessionView(master = self, controller = self.controller, users = self.users)
+        self.load_session.grid(column = 0, columnspan = 3, row = 6, padx = 10, pady = 10, sticky = 'sew')

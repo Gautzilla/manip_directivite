@@ -55,6 +55,10 @@ def get_user_by_attributes(user: User, session) -> User:
     except:
         return None
     
+def get_uncomplete_users(session) -> list:
+    # for now: return all users
+    return session.query(User).all()
+    
 def add_user(user: User, session):
     session.add(user)
 

@@ -1,4 +1,4 @@
-from model.queries import get_user_by_attributes, add_user
+from model.queries import get_user_by_attributes, add_user, get_uncomplete_users as get_uncomplete_users_db
 from model.models import User
 from datetime import date
 from model import Session
@@ -27,4 +27,9 @@ def register_user(first_name: str, last_name: str, birth_day: int, birth_month: 
         user_id = user.id
 
     return user_id
-        
+
+def get_uncomplete_users() -> dict:
+    with Session() as session:
+        users = {f'{first_name} {last_name}': id for id, first_name, last_name in [(user.id, user.first_name, user.last_name) for user in get_uncomplete_users_db(session)]}
+    return users
+  
