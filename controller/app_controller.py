@@ -23,3 +23,7 @@ class AppController():
         self.user_id = user_id
         self.view.close_login_view()
         ratings_controller = RatingsController(app_controller = self, app_view = self.view, user_id = self.user_id)
+
+    def end_test(self):
+        self.view.close_ratings_view()
+        self.view.show_test_end()

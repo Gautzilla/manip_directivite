@@ -31,3 +31,10 @@ class AppView(ctk.CTk):
 
     def close_login_view(self):
         self.login_view.grid_forget()
+
+    def close_ratings_view(self):
+        self.ratings_view.grid_forget()
+
+    def show_test_end(self):
+        self.end_message = ctk.CTkLabel(master = self, text = 'Test terminé. Merci !')
+        self.end_message.grid_configure(column = 1, row = 0, padx = 10, pady = 10, sticky = 'nsew')

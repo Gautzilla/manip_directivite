@@ -7,12 +7,15 @@ class RatingsController():
         self.app_controller = app_controller
         self.app_view = app_view
         self.user_id = user_id
-
-        self.load_next_recording()
+        
         self.ratings_view = self.app_view.show_ratings(controller = self)
+        self.load_next_recording()
 
     def load_next_recording(self):
         self.recording_id = get_next_recording_id(user_id = self.user_id)
+        if self.recording_id == None:
+            self.app_controller.end_test()
+            return
         self.recording_filename = get_recording_filename(id = self.recording_id)
 
     def register_rating(self, ratings: tuple):
