@@ -1,11 +1,17 @@
 from model.login_model import register_user as register_user_model
-from view.login_view import LoginView
+from view.app_view import AppView
 
-def register_user(first_name: str, last_name: str, birth_day: int, birth_month: int, birth_year: int, login_view: LoginView):
-    
-    output_text = register_user_model(first_name = first_name, last_name = last_name, birth_day = birth_day, birth_month = birth_month, birth_year = birth_year)
+class LoginController():
+    def __init__(self, app_controller, app_view: AppView):
+        self.app_view = app_view
+        self.app_controller = app_controller
+        self.login_view = self.app_view.show_login(controller = self)
 
-    if output_text == 'Utilisateur créé.':
-        login_view.print_validation_message(output_text)
-    else:
-        login_view.print_error_message(output_text)
+    def register_user(self, first_name: str, last_name: str, birth_day: int, birth_month: int, birth_year: int):
+        try: 
+            user_id = register_user_model(first_name = first_name, last_name = last_name, birth_day = birth_day, birth_month = birth_month, birth_year = birth_year)
+        except Exception as e:
+            self.login_view.print_error_message(e.args[0])
+        else:
+            self.login_view.print_validation_message('Utilisateur créé.')
+            self.app_controller.complete_user_registration(user_id)

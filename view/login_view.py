@@ -43,14 +43,13 @@ class BirthDate(ctk.CTkFrame):
 
 class LoginView(ctk.CTkFrame):
 
-    def submit(self, birth_date: BirthDate, first_name: ctk.CTkEntry, last_name: ctk.CTkEntry):        
-        from controller.login_controller import register_user
+    def submit(self, birth_date: BirthDate, first_name: ctk.CTkEntry, last_name: ctk.CTkEntry):  
 
         day, month, year = birth_date.get_birthdate()
         first_name = first_name.get()
         last_name = last_name.get()
         
-        register_user(first_name = first_name, last_name = last_name, birth_day = day, birth_month = month, birth_year = year, login_view = self)
+        self.controller.register_user(first_name = first_name, last_name = last_name, birth_day = day, birth_month = month, birth_year = year)
 
     def print_validation_message(self, message: str):
         self.feedback_message.configure(text = message, text_color = '#30693b')
@@ -58,8 +57,10 @@ class LoginView(ctk.CTkFrame):
     def print_error_message(self, message: str):
         self.feedback_message.configure(text = message, text_color = '#8d2929')
 
-    def __init__(self, master):
+    def __init__(self, master, controller):
         super().__init__(master)
+
+        self.controller = controller
 
         self.grid_rowconfigure([0,6], weight = 1)
 

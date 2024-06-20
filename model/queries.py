@@ -1,5 +1,5 @@
-from model.models import Room, Condition, User, Sentence, Recording
-import datetime
+from model.models import Room, Condition, User, Sentence, Recording, Rating
+from sqlalchemy import select
 
 def get_room_from_recording(recording: Recording, session) -> Room:
         return session.query(Room).filter(Room.id == recording.room_id).first()
@@ -57,3 +57,17 @@ def get_user_by_attributes(user: User, session) -> User:
     
 def add_user(user: User, session):
     session.add(user)
+
+def get_completed_ratings_count(user: User, session) -> int:
+    return len(session.query(Rating).filter(Rating.user_id == user.id).all())
+
+def get_unrated_recordings(user_id: int, session) -> list:
+    rated_recordings_subquery = select(Rating.recording_id).filter(Rating.user_id == user_id)
+    unrated_recordings = session.query(Recording).filter(~Recording.id.in_(rated_recordings_subquery)).all()
+    return unrated_recordings
+
+def get_recording(id, session) -> Recording:
+    return session.query(Recording).filter(Recording.id == id).first()
+
+def write_ratings(rating, session):
+    session.add(rating)
