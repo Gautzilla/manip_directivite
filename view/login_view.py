@@ -78,3 +78,6 @@ class LoginView(ctk.CTkFrame):
 
         self.feedback_message = ctk.CTkLabel(master = self, text = '')
         self.feedback_message.grid(column = 0, columnspan = 3, row = 5, padx = 0, pady = (10, 0), sticky = 'new')
+
+        self.recall_user = ctk.CTkButton(master = self, width = 70, text = 'Reprendre Session')
+        self.recall_user.grid(column = 1, row = 6, padx = 10, pady = 10, sticky = 'ews')
