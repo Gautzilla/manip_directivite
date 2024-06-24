@@ -34,7 +34,7 @@ class BirthDate(ctk.CTkFrame):
         month.grid(column = 1, row = 1, padx=(10,0), pady = 10, sticky = 'ew')
         month.set('Mois')
 
-        year = ctk.CTkComboBox(master = self, width = 100, values = [str(x) for x in range(1960, 2011)], variable = self.year_v)
+        year = ctk.CTkComboBox(master = self, width = 100, values = [str(x) for x in range(1960, 2011).__reversed__()], variable = self.year_v)
         year.grid(column = 2, row = 1, padx=10, pady = 10, sticky = 'ew')
         year.set('Année')
 
