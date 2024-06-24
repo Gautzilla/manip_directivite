@@ -1,11 +1,15 @@
-from model.login_model import register_user as register_user_model
+from model.login_model import register_user as register_user_model, get_uncomplete_users
 from view.app_view import AppView
 
 class LoginController():
     def __init__(self, app_controller, app_view: AppView):
         self.app_view = app_view
         self.app_controller = app_controller
-        self.login_view = self.app_view.show_login(controller = self)
+        users = get_uncomplete_users()
+        self.login_view = self.app_view.show_login(controller = self, users = users)
+
+    def load_session(self, user_id):
+        self.app_controller.complete_user_registration(user_id)
 
     def register_user(self, first_name: str, last_name: str, birth_day: int, birth_month: int, birth_year: int):
         try: 

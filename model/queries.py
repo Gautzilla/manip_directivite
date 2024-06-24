@@ -1,5 +1,5 @@
 from model.models import Room, Condition, User, Sentence, Recording, Rating
-from sqlalchemy import select
+from sqlalchemy import select, and_
 
 def get_room_from_recording(recording: Recording, session) -> Room:
         return session.query(Room).filter(Room.id == recording.room_id).first()
@@ -54,6 +54,13 @@ def get_user_by_attributes(user: User, session) -> User:
         return session.query(User).filter(User.first_name == user.first_name, User.last_name == user.last_name, User.birth_date == user.birth_date).first()
     except:
         return None
+    
+def get_uncomplete_users(session) -> list:    
+    user_ratings_subquery = select(Recording.id).join(Rating, and_(Rating.user_id == User.id, Rating.recording_id == Recording.id))
+    unrated_recordings_subquery = select(Recording.id).exists().where(Recording.id.not_in(user_ratings_subquery))
+    results = session.query(User).filter(unrated_recordings_subquery).all()
+
+    return results
     
 def add_user(user: User, session):
     session.add(user)
