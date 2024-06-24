@@ -40,12 +40,14 @@ class RatingsView(ctk.CTkFrame):
         self.validate_btn = ctk.CTkButton(master = self, width = 50, text = 'Valider', command = self.validate)
         self.validate_btn.grid_configure(row = 1, column = 0, columnspan = 3, padx = 0, pady = (10,0), sticky = 'new')
 
-        self.reset_ratings_view()
-
     def validate(self):
         self.controller.register_rating(ratings = tuple([slider.get_score() for slider in [self.timbre_rating, self.source_width_rating, self.plausibility_rating]]))
 
-    def reset_ratings_view(self):
+    def reset_ratings_view(self, sound_duration_ms: int):
         for slider in (self.timbre_rating, self.source_width_rating, self.plausibility_rating):
             slider.reset()
         self.validate_btn.configure(state = 'disabled')
+        self.after(sound_duration_ms, self.allow_rating)
+
+    def allow_rating(self):
+        self.validate_btn.configure(state = 'normal')

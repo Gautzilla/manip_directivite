@@ -17,8 +17,8 @@ class RatingsController():
             self.app_controller.end_test()
             return
         self.recording_filename = get_recording_filename(id = self.recording_id)
+        self.ratings_view.reset_ratings_view(sound_duration_ms = 1500)
 
     def register_rating(self, ratings: tuple):
         write_ratings(ratings, self.user_id, self.recording_id)
-        self.ratings_view.reset_ratings_view()
         self.load_next_recording()
