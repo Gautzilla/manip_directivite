@@ -3,13 +3,14 @@ from model.models import User
 from datetime import date
 from model import Session
 
-def register_user(first_name: str, last_name: str, birth_day: int, birth_month: int, birth_year: int) -> int:
+def register_user(first_name: str, last_name: str, birth_day: str, birth_month: str, birth_year: str) -> int:
     
     if len(first_name) == 0:
         raise Exception('Veuillez entrer un prénom.')
     if len(last_name) == 0:
         raise Exception('Veuillez entrer un nom.')
     try:
+        birth_year, birth_month, birth_day = [int(val) for val in (birth_year, birth_month, birth_day)]
         birth_date = date(birth_year, birth_month, birth_day)
     except:
         raise Exception('Veuillez entrer une date de naissance valide.')

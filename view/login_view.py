@@ -8,35 +8,33 @@ class BirthDate(ctk.CTkFrame):
 
     monthes = {'Janvier': 1, 'Février': 2, 'Mars': 3, 'Avril': 4, 'Mai': 5, 'Juin': 6, 'Juillet': 7, 'Août': 8, 'Septembre': 9, 'Octobre': 10, 'Novembre': 11, 'Décembre': 12}
 
-    def set_day(self, callback: str):
-        self.day_v = int(callback)
-
-    def set_month(self, callback: str):
-        self.month_v = self.monthes[callback]
-
-    def set_year(self, callback: str):
-        self.year_v = int(callback)
-
     def get_birthdate(self) -> tuple:
-        return (self.day_v, self.month_v, self.year_v)
+        return (self.day_v.get(), self.month_v.get(), self.year_v.get())
+    
+    def set_month(self, callback: str):
+        self.month_v = ctk.StringVar(value = self.monthes[callback])
 
     def __init__(self, master):
         super().__init__(master)
+
+        self.day_v = ctk.StringVar(value = 'Jour')
+        self.month_v = ctk.StringVar(value = 'Mois')
+        self.year_v = ctk.StringVar(value = 'Année')
 
         birthdate_header = ctk.CTkLabel(master = self, text = 'Date de naissance')
         birthdate_header.grid(column = 1, row = 0, padx = 0, pady = 0, sticky = 'new')
 
         self.grid_columnconfigure([0,2], weight = 1)
 
-        day = ctk.CTkComboBox(master = self, width = 100, values = [str(x) for x in range(1,32)], command = self.set_day, state = 'readonly')
+        day = ctk.CTkComboBox(master = self, width = 100, values = [str(x) for x in range(1,32)], variable = self.day_v)
         day.grid(column = 0, row = 1, padx=(10,0), pady = 10, sticky = 'ew')
         day.set('Jour')
 
-        month = ctk.CTkComboBox(master = self, width = 100, values = [key for key in self.monthes.keys()], command = self.set_month, state = 'readonly')
+        month = ctk.CTkComboBox(master = self, width = 100, values = [key for key in self.monthes.keys()], variable = self.month_v, command = self.set_month)
         month.grid(column = 1, row = 1, padx=(10,0), pady = 10, sticky = 'ew')
         month.set('Mois')
 
-        year = ctk.CTkComboBox(master = self, width = 100, values = [str(x) for x in range(1960, 2011)], command = self.set_year, state = 'readonly')
+        year = ctk.CTkComboBox(master = self, width = 100, values = [str(x) for x in range(1960, 2011)], variable = self.year_v)
         year.grid(column = 2, row = 1, padx=10, pady = 10, sticky = 'ew')
         year.set('Année')
 
