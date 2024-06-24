@@ -20,5 +20,5 @@ class RatingsController():
 
     def register_rating(self, ratings: tuple):
         write_ratings(ratings, self.user_id, self.recording_id)
-        self.ratings_view.reset_sliders()
+        self.ratings_view.reset_ratings_view()
         self.load_next_recording()
