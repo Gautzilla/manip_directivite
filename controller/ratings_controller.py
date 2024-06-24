@@ -23,9 +23,13 @@ class RatingsController():
     def play_next_recording(self):
         #TODO: remove next line when the correct audios will be added
         self.recording_filename = r'C:\Users\labsticc\Desktop\pink_noise.wav'
-        recording_duration = get_sound_duration(path = self.recording_filename)
-        play_sound(self.recording_filename)
-        self.ratings_view.reset_ratings_view(sound_duration_ms = recording_duration)
+
+        try:            
+            recording_duration = get_sound_duration(path = self.recording_filename)
+            play_sound(self.recording_filename)
+            self.ratings_view.reset_ratings_view(sound_duration_ms = recording_duration)
+        except Exception as e:
+            self.ratings_view.display_soundfile_error(soundfile = self.recording_filename)
 
     def register_rating(self, ratings: tuple):
         write_ratings(ratings, self.user_id, self.recording_id)
