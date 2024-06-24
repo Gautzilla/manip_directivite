@@ -24,21 +24,21 @@ class RatingsView(ctk.CTkFrame):
     def __init__(self, master, controller):
         super().__init__(master)
 
+        self.grid_rowconfigure((0,3), weight = 1)
+
         self.controller = controller
 
-        self.grid_columnconfigure((0,1), weight = 1)
-
         self.timbre_rating = Rating(master = self, attribute_name = 'Timbre')
-        self.timbre_rating.grid_configure(row = 0, column = 0, padx = (10,0), pady = (10,0), sticky = 'new')
+        self.timbre_rating.grid_configure(row = 1, column = 0, padx = (10,0), pady = (10,0), sticky = 'new')
 
         self.source_width_rating = Rating(master = self, attribute_name = 'Largeur de Source')
-        self.source_width_rating.grid_configure(row = 0, column = 1, padx = (10,0), pady = (10,0), sticky = 'new')
+        self.source_width_rating.grid_configure(row = 1, column = 1, padx = (10,0), pady = (10,0), sticky = 'new')
 
         self.plausibility_rating = Rating(master = self, attribute_name = 'Plausibilité')
-        self.plausibility_rating.grid_configure(row = 0, column = 2, padx = (10,0), pady = (10,0), sticky = 'new')
+        self.plausibility_rating.grid_configure(row = 1, column = 2, padx = (10,0), pady = (10,0), sticky = 'new')
 
         self.validate_btn = ctk.CTkButton(master = self, width = 50, text = 'Valider', command = self.validate)
-        self.validate_btn.grid_configure(row = 1, column = 0, columnspan = 3, padx = 0, pady = (10,0), sticky = 'new')
+        self.validate_btn.grid_configure(row = 2, column = 0, columnspan = 3, padx = 0, pady = (10,0), sticky = 'new')
 
     def validate(self):
         self.controller.register_rating(ratings = tuple([slider.get_score() for slider in [self.timbre_rating, self.source_width_rating, self.plausibility_rating]]))
