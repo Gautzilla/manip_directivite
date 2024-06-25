@@ -27,7 +27,8 @@ class RatingsController():
         try:            
             recording_duration = get_sound_duration(path = self.recording_filename)
             play_sound(self.recording_filename)
-            self.ratings_view.reset_ratings_view(sound_duration_ms = recording_duration)
+            self.ratings_view.reset_sliders()
+            self.ratings_view.disable_validate_button(recording_duration)
         except Exception as e:
             self.ratings_view.display_soundfile_error(soundfile = self.recording_filename)
 
