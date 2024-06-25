@@ -65,8 +65,11 @@ def get_uncomplete_users(session) -> list:
 def add_user(user: User, session):
     session.add(user)
 
-def get_completed_ratings_count(user: User, session) -> int:
-    return len(session.query(Rating).filter(Rating.user_id == user.id).all())
+def get_nb_completed_ratings(user_id: int, session) -> int:
+    return len(session.query(Rating.id).filter(Rating.user_id == user_id).all())
+
+def get_nb_recordings(session) -> int:
+    return len(session.query(Recording.id).all())
 
 def get_unrated_recordings(user_id: int, session) -> list:
     rated_recordings_subquery = select(Rating.recording_id).filter(Rating.user_id == user_id)

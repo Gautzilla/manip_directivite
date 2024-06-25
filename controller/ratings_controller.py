@@ -1,5 +1,5 @@
 from view.app_view import AppView
-from model.ratings_model import get_next_recording_id, get_recording_filename, write_ratings
+from model.ratings_model import get_next_recording_id, get_recording_filename, write_ratings, get_progress
 from model.audio_player_model import get_sound_duration, play_sound
 
 class RatingsController():
@@ -27,9 +27,15 @@ class RatingsController():
         try:            
             recording_duration = get_sound_duration(path = self.recording_filename)
             play_sound(self.recording_filename)
-            self.ratings_view.reset_ratings_view(sound_duration_ms = recording_duration)
+            self.ratings_view.reset_sliders()
+            self.ratings_view.disable_validate_button(recording_duration)
+            self.update_progress()
         except Exception as e:
             self.ratings_view.display_soundfile_error(soundfile = self.recording_filename)
+
+    def update_progress(self):
+        progress = get_progress(self.user_id)
+        self.ratings_view.set_progress(progress)
 
     def register_rating(self, ratings: tuple):
         write_ratings(ratings, self.user_id, self.recording_id)
