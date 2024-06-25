@@ -8,10 +8,10 @@ class Rating(ctk.CTkFrame):
 
         self.grid_columnconfigure((0,2), weight = 1)
 
-        self.slider = ctk.CTkSlider(master = self, orientation = 'vertical', from_ = 0., to = 1.)
+        self.slider = ctk.CTkSlider(master = self, orientation = 'vertical', from_ = 0., to = 1., height = 500)
         self.slider.grid_configure(row = 0, column = 1, padx = 0, pady = 0, sticky = 'n')
 
-        self.label = ctk.CTkLabel(master = self, text = self.attribute_name)
+        self.label = ctk.CTkLabel(master = self, text = self.attribute_name, width = 100)
         self.label.grid_configure(row = 1, column = 0, columnspan = 3, padx = 10, pady = (10,0), sticky = 'new')
 
     def get_score(self) -> float:
@@ -29,16 +29,16 @@ class RatingsView(ctk.CTkFrame):
         self.controller = controller
 
         self.timbre_rating = Rating(master = self, attribute_name = 'Timbre')
-        self.timbre_rating.grid_configure(row = 1, column = 0, padx = (10,0), pady = (10,0), sticky = 'new')
+        self.timbre_rating.grid_configure(row = 1, column = 0, padx = (20,0), pady = (10,0), sticky = 'new')
 
         self.source_width_rating = Rating(master = self, attribute_name = 'Largeur de Source')
-        self.source_width_rating.grid_configure(row = 1, column = 1, padx = (10,0), pady = (10,0), sticky = 'new')
+        self.source_width_rating.grid_configure(row = 1, column = 1, padx = (20,0), pady = (10,0), sticky = 'new')
 
         self.plausibility_rating = Rating(master = self, attribute_name = 'Plausibilité')
-        self.plausibility_rating.grid_configure(row = 1, column = 2, padx = (10,0), pady = (10,0), sticky = 'new')
+        self.plausibility_rating.grid_configure(row = 1, column = 2, padx = 20, pady = (10,0), sticky = 'new')
 
         self.validate_btn = ctk.CTkButton(master = self, width = 50, text = 'Valider', command = self.validate)
-        self.validate_btn.grid_configure(row = 2, column = 0, columnspan = 3, padx = 0, pady = (10,0), sticky = 'new')
+        self.validate_btn.grid_configure(row = 2, column = 0, columnspan = 3, padx = 0, pady = (20,0), sticky = 'new')
 
         self.error_display = ctk.CTkLabel(master = self, text = '', text_color = '#8d2929')
         self.error_display.grid_configure(row = 3, column = 0, columnspan = 3, padx = 10, pady = (10,0))
