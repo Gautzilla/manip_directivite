@@ -35,3 +35,6 @@ class AppView(ctk.CTk):
     def show_test_end(self):
         self.end_message = ctk.CTkLabel(master = self, text = 'Test terminé. Merci !')
         self.end_message.grid_configure(column = 1, row = 0, padx = 10, pady = 10, sticky = 'nsew')
+
+    def set_binding(self, sequence: str, callback: callable):
+        self.bind(sequence, callback)

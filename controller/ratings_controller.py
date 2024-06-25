@@ -10,6 +10,7 @@ class RatingsController():
         self.user_id = user_id
         
         self.ratings_view = self.app_view.show_ratings(controller = self)
+        self.app_view.set_binding('<Return>', lambda _ : self.ratings_view.validate())
         self.load_next_recording()
 
     def load_next_recording(self):
