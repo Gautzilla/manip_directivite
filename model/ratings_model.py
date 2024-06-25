@@ -1,5 +1,5 @@
 from model import Session
-from model.queries import get_unrated_recordings, get_recording, write_ratings as write_to_db
+from model.queries import get_unrated_recordings, get_recording, write_ratings as write_to_db, get_nb_completed_ratings, get_nb_recordings
 from random import choice
 from model.models import Rating
 
@@ -22,3 +22,9 @@ def write_ratings(ratings: tuple, user_id: int, recording_id: int):
     with Session() as session:
         write_to_db(r, session)
         session.commit()
+
+def get_progress(user_id: int):
+    with Session() as session:
+        nb_rated_recordings = get_nb_completed_ratings(user_id, session)
+        nb_total_recordings = get_nb_recordings(session)
+    return nb_rated_recordings / nb_total_recordings
