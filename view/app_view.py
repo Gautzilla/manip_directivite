@@ -4,14 +4,11 @@ from view.ratings_view import RatingsView
 
 class AppView(ctk.CTk):
 
-    WIDTH = 1920
-    HEIGHT = 1080
-
     def __init__(self, controller):
         super().__init__()
 
         self.title('MANIP')
-        self.geometry = f'{self.WIDTH}x{self.HEIGHT}'        
+        self.after(0, lambda:self.state('zoomed'))
 
     def show_login(self, controller, users) -> LoginView:
 
