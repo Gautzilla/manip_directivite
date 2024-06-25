@@ -40,8 +40,11 @@ class RatingsView(ctk.CTkFrame):
         self.validate_btn = ctk.CTkButton(master = self, width = 50, text = 'Valider', command = self.validate)
         self.validate_btn.grid_configure(row = 2, column = 0, columnspan = 3, padx = 0, pady = (20,0), sticky = 'new')
 
+        self.progress_bar = ctk.CTkProgressBar(master = self)
+        self.progress_bar.grid_configure(row = 3, column = 0, columnspan = 3, padx = 0, pady = (10,0), sticky = 'new')
+
         self.error_display = ctk.CTkLabel(master = self, text = '', text_color = '#8d2929')
-        self.error_display.grid_configure(row = 3, column = 0, columnspan = 3, padx = 10, pady = (10,0))
+        self.error_display.grid_configure(row = 4, column = 0, columnspan = 3, padx = 10, pady = (10,0))
 
     def validate(self):
         self.controller.register_rating(ratings = tuple([slider.get_score() for slider in [self.timbre_rating, self.source_width_rating, self.plausibility_rating]]))
@@ -58,3 +61,6 @@ class RatingsView(ctk.CTkFrame):
     def display_soundfile_error(self, soundfile: str):
         self.validate_btn.configure(state = 'disabled')
         self.error_display.configure(text = f'Impossible d\'ouvrir {soundfile}')
+
+    def set_progress(self, progress: float):
+        self.progress_bar.set(progress)
