@@ -64,10 +64,10 @@ class LoadSessionView(ctk.CTkFrame):
 
 class LoginView(ctk.CTkFrame):
 
-    def submit(self, birth_date: BirthDate, first_name: ctk.CTkEntry, last_name: ctk.CTkEntry):  
-        day, month, year = birth_date.get_birthdate()
-        first_name = first_name.get()
-        last_name = last_name.get()
+    def submit(self):  
+        day, month, year = self.birth_date.get_birthdate()
+        first_name = self.first_name.get()
+        last_name = self.last_name.get()
         
         self.controller.register_user(first_name = first_name, last_name = last_name, birth_day = day, birth_month = month, birth_year = year)
 
@@ -85,16 +85,16 @@ class LoginView(ctk.CTkFrame):
 
         self.grid_rowconfigure([0,6], weight = 1)
 
-        first_name = ctk.CTkEntry(master = self, placeholder_text = 'Prénom')
-        first_name.grid(column = 0, row = 1, columnspan = 3, padx = 40, pady = (10,0), sticky = 'ew')
+        self.first_name = ctk.CTkEntry(master = self, placeholder_text = 'Prénom')
+        self.first_name.grid(column = 0, row = 1, columnspan = 3, padx = 40, pady = (10,0), sticky = 'ew')
 
-        last_name = ctk.CTkEntry(master = self, placeholder_text = 'Nom')
-        last_name.grid(column = 0, row = 2, columnspan = 3, padx = 40, pady = (10,0), sticky = 'ew')
+        self.last_name = ctk.CTkEntry(master = self, placeholder_text = 'Nom')
+        self.last_name.grid(column = 0, row = 2, columnspan = 3, padx = 40, pady = (10,0), sticky = 'ew')
 
-        birth_date = BirthDate(master = self)
-        birth_date.grid(column = 0, row = 3, columnspan = 3, padx = 10, pady = (10,0), sticky = 'new')
+        self.birth_date = BirthDate(master = self)
+        self.birth_date.grid(column = 0, row = 3, columnspan = 3, padx = 10, pady = (10,0), sticky = 'new')
 
-        submit = ctk.CTkButton(master = self, width = 70, text = 'Valider', command = lambda: self.submit(birth_date = birth_date, first_name = first_name, last_name = last_name))
+        submit = ctk.CTkButton(master = self, width = 70, text = 'Valider', command = lambda: self.submit())
         submit.grid(column = 1, row = 4, padx = 0, pady = (10, 0), sticky = 'n')
 
         self.feedback_message = ctk.CTkLabel(master = self, text = '')

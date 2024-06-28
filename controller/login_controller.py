@@ -7,6 +7,7 @@ class LoginController():
         self.app_controller = app_controller
         users = get_uncomplete_users()
         self.login_view = self.app_view.show_login(controller = self, users = users)
+        self.app_view.set_binding('<Return>', lambda _ : self.login_view.submit())
 
     def load_session(self, user_id):
         self.app_controller.complete_user_registration(user_id)
