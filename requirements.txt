@@ -1,0 +1,5 @@
+customtkinter==5.2.2
+pandas==2.2.2
+pygame==2.5.2
+soundfile==0.12.1
+SQLAlchemy==2.0.30
