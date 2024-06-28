@@ -1,4 +1,4 @@
-# Application for rating binaural sounds
+# Application for rating binaural recordings of sources that differ in directivity
 
 ## Aim of the application
 
@@ -6,7 +6,7 @@ This MVC software was developped for a psychoacoustics experiment. During the ex
 
 ## Description of the recordings
 
-The rated sounds are recordings of a male voice uttering sentences while performing (or not) head movements. This voice could be either live-spoken or played through a loudspeaker (which reproduced the head movements of the human speaker). These sentences were recorded according to different states of the following variables:
+The rated sounds are recordings of a male voice uttering sentences while performing (or not) head movements. This voice could be either live-spoken or played through a loudspeaker (which reproduced the head movements of the human speaker): these two sound sources differ in directivity, which might lead to differences in quality ratings with the source orientation or movement. These sentences were recorded according to different states of the following variables:
 
 |Source|Distance|Facing Angle|Movement Amplitude|Movement|
 |:---:|:---:|:---:|:---:|:---:|
