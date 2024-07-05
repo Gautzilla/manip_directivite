@@ -1,6 +1,8 @@
 from model.models import Room, Condition, User, Sentence, Recording, Rating
 from sqlalchemy import select, and_
 
+RECORDINGS_IN_THIS_SESSION = select(Recording.id).join(Room, Room.id == Recording.room_id).join(Condition, Condition.id == Recording.conditions_id).join(Sentence, Sentence.id == Recording.sentence_id).filter(Recording.id == 3)
+
 def get_room_from_recording(recording: Recording, session) -> Room:
         return session.query(Room).filter(Room.id == recording.room_id).first()
 
@@ -56,8 +58,8 @@ def get_user_by_attributes(user: User, session) -> User:
         return None
     
 def get_uncomplete_users(session) -> list:    
-    user_ratings_subquery = select(Recording.id).join(Rating, and_(Rating.user_id == User.id, Rating.recording_id == Recording.id))
-    unrated_recordings_subquery = select(Recording.id).exists().where(Recording.id.not_in(user_ratings_subquery))
+    user_ratings_subquery = RECORDINGS_IN_THIS_SESSION.join(Rating, and_(Rating.user_id == User.id, Rating.recording_id == Recording.id))
+    unrated_recordings_subquery = RECORDINGS_IN_THIS_SESSION.exists().where(Recording.id.not_in(user_ratings_subquery))
     results = session.query(User).filter(unrated_recordings_subquery).all()
 
     return results
@@ -69,11 +71,11 @@ def get_nb_completed_ratings(user_id: int, session) -> int:
     return len(session.query(Rating.id).filter(Rating.user_id == user_id).all())
 
 def get_nb_recordings(session) -> int:
-    return len(session.query(Recording.id).all())
+    return len(session.query(RECORDINGS_IN_THIS_SESSION.subquery()).all())
 
 def get_unrated_recordings(user_id: int, session) -> list:
     rated_recordings_subquery = select(Rating.recording_id).filter(Rating.user_id == user_id)
-    unrated_recordings = session.query(Recording).filter(~Recording.id.in_(rated_recordings_subquery)).all()
+    unrated_recordings = session.query(Recording.id).where(and_(Recording.id.in_(RECORDINGS_IN_THIS_SESSION), ~Recording.id.in_(rated_recordings_subquery))).all()
     return unrated_recordings
 
 def get_recording(id, session) -> Recording:
