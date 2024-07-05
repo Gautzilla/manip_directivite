@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 
 database.svg
+data/audio/*.wav
