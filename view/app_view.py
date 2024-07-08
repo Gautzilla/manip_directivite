@@ -10,12 +10,12 @@ class AppView(ctk.CTk):
         self.title('MANIP')
         self.after(0, lambda:self.state('zoomed'))
 
-    def show_login(self, controller, users) -> LoginView:
+    def show_login(self, controller, users: dict, variables: dict) -> LoginView:
 
         self.grid_columnconfigure([0,2], weight = 1)
         self.grid_rowconfigure(0, weight = 1)
 
-        self.login_view = LoginView(master = self, controller = controller, users = users)
+        self.login_view = LoginView(master = self, controller = controller, users = users, variables = variables)
         self.login_view.grid(column = 1, row = 0, padx = 0, pady = 0, sticky = 'nsew')
 
         return self.login_view

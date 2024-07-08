@@ -11,6 +11,19 @@ RECORDINGS_TO_REJECT = [40, 54, 117, 120]
 REJECTED_RECORDINGS_RATIO = 1/3
 ROOMS = [Room(0, 'CLOUS', 0.5), Room(1, 'SUAPS', 2.)]
 
+def get_variables() -> dict:
+    variables = {}
+
+    with Session() as session:
+        variables['Room'] = [room.name for room in get_all_rooms(session)]
+        variables['Distance'] = [distance[0] for distance in get_all_distances(session)]
+        variables['Angle'] = [angle[0] for angle in get_all_angles(session)]
+        variables['Movement'] = [movement[0] for movement in get_all_movements(session)]
+        variables['Source'] = [source[0] for source in get_all_sources(session)]
+        variables['Amplitude'] = [amplitude[0] for amplitude in get_all_amplitudes(session)]
+
+    return variables
+
 def create_constants(recordings: pd.DataFrame):
     # Conditions
     conditions = []

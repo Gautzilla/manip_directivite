@@ -1,4 +1,5 @@
 from model.login_model import register_user as register_user_model, get_uncomplete_users
+from model.db_constants_filler import get_variables
 from view.app_view import AppView
 
 class LoginController():
@@ -6,7 +7,7 @@ class LoginController():
         self.app_view = app_view
         self.app_controller = app_controller
         users = get_uncomplete_users()
-        self.login_view = self.app_view.show_login(controller = self, users = users)
+        self.login_view = self.app_view.show_login(controller = self, users = users, variables = get_variables())
         self.app_view.set_binding('<Return>', lambda _ : self.login_view.submit())
 
     def load_session(self, user_id):

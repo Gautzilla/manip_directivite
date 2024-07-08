@@ -106,13 +106,11 @@ class LoginView(ctk.CTkFrame):
     def print_error_message(self, message: str):
         self.feedback_message.configure(text = message, text_color = '#8d2929')
 
-    def __init__(self, master, controller, users: dict):
+    def __init__(self, master, controller, users: dict, variables: dict):
         super().__init__(master)
 
         self.controller = controller
         self.users = users
-
-        variables = {'Room': ['CLOUS', 'SUAPS'], 'Distance': [1,4]} # EXEMPLE
 
         self.grid_rowconfigure([0,6], weight = 1)
 

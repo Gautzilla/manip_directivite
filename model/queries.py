@@ -15,13 +15,16 @@ def filter_recordings_in_session(rooms, distances, angles, movements, sources, a
     )
 
 def get_room_from_recording(recording: Recording, session) -> Room:
-        return session.query(Room).filter(Room.id == recording.room_id).first()
+    return session.query(Room).filter(Room.id == recording.room_id).first()
 
 def get_room_by_attributes(room, session):
     try:
         return session.query(Room).filter(Room.name == room.name, Room.rt_60 == room.rt_60).first()
     except:
-        return None    
+        return None   
+
+def get_all_rooms(session):
+    return session.query(Room).all()
 
 def add_room(room: Room, session):
     session.add(room)
@@ -37,6 +40,21 @@ def add_conditions(conditions: Condition, session):
 
 def get_conditions_from_recording(recording: Recording, session) -> Condition:
     return session.query(Condition).filter(Condition.id == recording.conditions_id).first()
+
+def get_all_distances(session) -> list:
+    return session.query(Condition.distance).distinct()
+
+def get_all_movements(session) -> list:
+    return session.query(Condition.movement).distinct()
+
+def get_all_angles(session) -> list:
+    return session.query(Condition.angle).distinct()
+
+def get_all_sources(session) -> list:
+    return session.query(Condition.source).distinct()
+
+def get_all_amplitudes(session) -> list:
+    return session.query(Sentence.amplitude).distinct()
 
 def get_sentence_by_attributes(sentence: Sentence, session) -> Sentence:
     try:
