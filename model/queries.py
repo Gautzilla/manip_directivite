@@ -1,7 +1,18 @@
 from model.models import Room, Condition, User, Sentence, Recording, Rating
 from sqlalchemy import select, and_
 
-RECORDINGS_IN_THIS_SESSION = select(Recording.id).join(Room, Room.id == Recording.room_id).join(Condition, Condition.id == Recording.conditions_id).join(Sentence, Sentence.id == Recording.sentence_id).filter(Recording.id == 3)
+JOINED_TABLES = select(Recording.id).join(Room, Room.id == Recording.room_id).join(Condition, Condition.id == Recording.conditions_id).join(Sentence, Sentence.id == Recording.sentence_id)
+_recordings_in_session = JOINED_TABLES # filtered by filter_recordings_in_session function
+
+def filter_recordings_in_session(rooms, distances, angles, movements, sources, amplitudes):
+    global _recordings_in_session
+    _recordings_in_session = JOINED_TABLES.filter(
+        Room.id.in_(rooms)
+    ).filter(
+        and_(Condition.angle.in_(angles), Condition.distance.in_(distances), Condition.movement.in_(movements), Condition.source.in_(sources))
+    ).filter(
+        Sentence.amplitude.in_(amplitudes)
+    )
 
 def get_room_from_recording(recording: Recording, session) -> Room:
         return session.query(Room).filter(Room.id == recording.room_id).first()
@@ -58,8 +69,8 @@ def get_user_by_attributes(user: User, session) -> User:
         return None
     
 def get_uncomplete_users(session) -> list:    
-    user_ratings_subquery = RECORDINGS_IN_THIS_SESSION.join(Rating, and_(Rating.user_id == User.id, Rating.recording_id == Recording.id))
-    unrated_recordings_subquery = RECORDINGS_IN_THIS_SESSION.exists().where(Recording.id.not_in(user_ratings_subquery))
+    user_ratings_subquery = _recordings_in_session.join(Rating, and_(Rating.user_id == User.id, Rating.recording_id == Recording.id))
+    unrated_recordings_subquery = _recordings_in_session.exists().where(Recording.id.not_in(user_ratings_subquery))
     results = session.query(User).filter(unrated_recordings_subquery).all()
 
     return results
@@ -71,11 +82,11 @@ def get_nb_completed_ratings(user_id: int, session) -> int:
     return len(session.query(Rating.id).filter(Rating.user_id == user_id).all())
 
 def get_nb_recordings(session) -> int:
-    return len(session.query(RECORDINGS_IN_THIS_SESSION.subquery()).all())
+    return len(session.query(_recordings_in_session.subquery()).all())
 
 def get_unrated_recordings(user_id: int, session) -> list:
     rated_recordings_subquery = select(Rating.recording_id).filter(Rating.user_id == user_id)
-    unrated_recordings = session.query(Recording.id).where(and_(Recording.id.in_(RECORDINGS_IN_THIS_SESSION), ~Recording.id.in_(rated_recordings_subquery))).all()
+    unrated_recordings = session.query(Recording.id).where(and_(Recording.id.in_(_recordings_in_session), ~Recording.id.in_(rated_recordings_subquery))).all()
     return unrated_recordings
 
 def get_recording(id, session) -> Recording:

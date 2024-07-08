@@ -1,7 +1,10 @@
 from model import Session
-from model.queries import get_unrated_recordings, get_recording, write_ratings as write_to_db, get_nb_completed_ratings, get_nb_recordings
+from model.queries import filter_recordings_in_session, get_unrated_recordings, get_recording, write_ratings as write_to_db, get_nb_completed_ratings, get_nb_recordings
 from random import choice
 from model.models import Rating
+
+def filter_recordings(rooms, distances, angles, movements, sources, amplitudes) -> None:
+    filter_recordings_in_session(rooms, distances, angles, movements, sources, amplitudes)
 
 def get_next_recording_id(user_id: int) -> int:
     with Session() as session:
