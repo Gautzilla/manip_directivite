@@ -1,5 +1,5 @@
 from view.app_view import AppView
-from model.ratings_model import get_next_recording_id, get_recording_filename, write_ratings, get_progress
+from model.ratings_model import filter_recordings, get_next_recording_id, get_recording_filename, write_ratings, get_progress
 from model.audio_player_model import get_sound_duration, play_sound
 from os import path
 
@@ -7,10 +7,12 @@ class RatingsController():
 
     MEDIA_FOLDER = path.abspath(r'data\audio')
 
-    def __init__(self, app_controller, app_view: AppView, user_id: int):
+    def __init__(self, app_controller, app_view: AppView, user_id: int, variables: dict):
         self.app_controller = app_controller
         self.app_view = app_view
         self.user_id = user_id
+
+        filter_recordings(variables)
         
         self.ratings_view = self.app_view.show_ratings(controller = self)
         self.app_view.set_binding('<Return>', lambda _ : self.ratings_view.validate())

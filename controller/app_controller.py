@@ -19,10 +19,10 @@ class AppController():
         
         self.view.mainloop()
     
-    def complete_user_registration(self, user_id: int):
+    def complete_user_registration(self, user_id: int, variables: dict):
         self.user_id = user_id
         self.view.close_login_view()
-        ratings_controller = RatingsController(app_controller = self, app_view = self.view, user_id = self.user_id)
+        ratings_controller = RatingsController(app_controller = self, app_view = self.view, user_id = self.user_id, variables = variables)
 
     def end_test(self):
         self.view.close_ratings_view()
