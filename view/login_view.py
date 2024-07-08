@@ -79,6 +79,11 @@ class RecordingsFilterView(ctk.CTkFrame):
                 self.levels.append(ctk.CTkCheckBox(master = self, text = level, command = callback))
                 self.levels[-1].grid(column = index + 1, row = 0, padx = (10, 0), pady = 10, sticky = 'ne')
 
+                if level == 'CLOUS':
+                    self.levels[-1].configure(state = ctk.DISABLED)
+                else:
+                    self.levels[-1].select()
+
     def __init__(self, master, controller, variables: dict):
         super().__init__(master)
         self.controller = controller
@@ -90,6 +95,8 @@ class RecordingsFilterView(ctk.CTkFrame):
         for index, (variable, levels) in enumerate(variables.items()):
             self.variables.append(self.VariableFilter(self, variable_name = variable, variable_levels = levels, callback = self.set_recording_filter))
             self.variables[-1].grid(column = 0, row = index + 1, padx = 10, pady = 10, sticky = 'sew')
+
+        self.set_recording_filter()
     
     def set_recording_filter(self) -> None:
 
