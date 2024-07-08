@@ -7,6 +7,7 @@ Base = declarative_base()
 from model.models import *
 
 engine = create_engine(DATABASE_PATH, echo = False)
+Base.metadata.drop_all(bind = engine)
 Base.metadata.create_all(bind = engine)
 Session = sessionmaker(bind = engine)
 
