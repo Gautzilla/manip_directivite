@@ -4,10 +4,10 @@ from sqlalchemy import select, and_
 JOINED_TABLES = select(Recording.id).join(Room, Room.id == Recording.room_id).join(Condition, Condition.id == Recording.conditions_id).join(Sentence, Sentence.id == Recording.sentence_id)
 _recordings_in_session = JOINED_TABLES # filtered by filter_recordings_in_session function
 
-def filter_recordings_in_session(rooms, distances, angles, movements, sources, amplitudes):
+def filter_recordings_in_session(rooms: list, distances: list, angles: list, movements: list, sources: list, amplitudes: list):
     global _recordings_in_session
     _recordings_in_session = JOINED_TABLES.filter(
-        Room.id.in_(rooms)
+        Room.name.in_(rooms)
     ).filter(
         and_(Condition.angle.in_(angles), Condition.distance.in_(distances), Condition.movement.in_(movements), Condition.source.in_(sources))
     ).filter(

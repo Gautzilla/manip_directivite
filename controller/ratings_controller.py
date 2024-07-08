@@ -7,12 +7,12 @@ class RatingsController():
 
     MEDIA_FOLDER = path.abspath(r'data\audio')
 
-    def __init__(self, app_controller, app_view: AppView, user_id: int):
+    def __init__(self, app_controller, app_view: AppView, user_id: int, variables: dict):
         self.app_controller = app_controller
         self.app_view = app_view
         self.user_id = user_id
 
-        filter_recordings(rooms = [0,1], distances = [1,4], angles = ['Front','Side'], movements = [0,1], sources = ['Human','Loudspeaker'], amplitudes = ['Small','Large'])
+        filter_recordings(variables)
         
         self.ratings_view = self.app_view.show_ratings(controller = self)
         self.app_view.set_binding('<Return>', lambda _ : self.ratings_view.validate())

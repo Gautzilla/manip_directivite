@@ -65,7 +65,7 @@ class LoadSessionView(ctk.CTkFrame):
 class RecordingsFilterView(ctk.CTkFrame):
 
     class VariableFilter(ctk.CTkFrame):
-        def __init__(self, master, variable_name: str, variable_levels: list):
+        def __init__(self, master, variable_name: str, variable_levels: list, callback: callable):
             super().__init__(master)
 
             self.grid_columnconfigure(1, weight = 1)
@@ -76,20 +76,31 @@ class RecordingsFilterView(ctk.CTkFrame):
             self.levels = []
 
             for index, level in enumerate(variable_levels):
-                self.levels.append(ctk.CTkCheckBox(master = self, text = level))
+                self.levels.append(ctk.CTkCheckBox(master = self, text = level, command = callback))
                 self.levels[-1].grid(column = index + 1, row = 0, padx = (10, 0), pady = 10, sticky = 'ne')
 
-    def __init__(self, master, variables: dict):
+    def __init__(self, master, controller, variables: dict):
         super().__init__(master)
+        self.controller = controller
 
         self.variables = []
         
         self.grid_columnconfigure(0, weight = 1)
 
         for index, (variable, levels) in enumerate(variables.items()):
-            self.variables.append(self.VariableFilter(self, variable, levels))
+            self.variables.append(self.VariableFilter(self, variable_name = variable, variable_levels = levels, callback = self.set_recording_filter))
             self.variables[-1].grid(column = 0, row = index + 1, padx = 10, pady = 10, sticky = 'sew')
     
+    def set_recording_filter(self) -> None:
+
+        filter = {}
+
+        for variable in self.variables:
+            name = variable.name.cget('text')
+            levels = [level.cget('text') for level in variable.levels if level.get()]
+            filter[name] = levels
+
+        self.controller.filter_variables(filter)
 
 class LoginView(ctk.CTkFrame):
 
@@ -129,7 +140,7 @@ class LoginView(ctk.CTkFrame):
         self.feedback_message = ctk.CTkLabel(master = self, text = '')
         self.feedback_message.grid(column = 0, columnspan = 3, row = 5, padx = 0, pady = (10, 0), sticky = 'new')
 
-        self.variable_filter = RecordingsFilterView(self, variables = variables)
+        self.variable_filter = RecordingsFilterView(self, controller = self.controller, variables = variables)
         self.variable_filter.grid(column = 0, columnspan = 3, row = 6, padx = 10, pady = (10,0), sticky = 'sew')
 
         self.load_session = LoadSessionView(master = self, controller = self.controller, users = self.users)

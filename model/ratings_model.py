@@ -3,7 +3,14 @@ from model.queries import filter_recordings_in_session, get_unrated_recordings, 
 from random import choice
 from model.models import Rating
 
-def filter_recordings(rooms, distances, angles, movements, sources, amplitudes) -> None:
+def filter_recordings(variables: dict) -> None:
+    rooms = variables['Room']
+    distances = variables['Distance']
+    angles = variables['Angle']
+    movements = list(map(lambda movement: 1 if movement else 0, variables['Movement']))
+    sources = variables['Source']
+    amplitudes = variables['Amplitude']
+    
     filter_recordings_in_session(rooms, distances, angles, movements, sources, amplitudes)
 
 def get_next_recording_id(user_id: int) -> int:

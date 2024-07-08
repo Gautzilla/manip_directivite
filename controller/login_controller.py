@@ -7,11 +7,15 @@ class LoginController():
         self.app_view = app_view
         self.app_controller = app_controller
         users = get_uncomplete_users()
-        self.login_view = self.app_view.show_login(controller = self, users = users, variables = get_variables())
+        self.variables = get_variables()
+        self.login_view = self.app_view.show_login(controller = self, users = users, variables = self.variables)
         self.app_view.set_binding('<Return>', lambda _ : self.login_view.submit())
 
+    def filter_variables(self, variables: dict):
+        self.variables = variables
+
     def load_session(self, user_id):
-        self.app_controller.complete_user_registration(user_id)
+        self.app_controller.complete_user_registration(user_id, self.variables)
 
     def register_user(self, first_name: str, last_name: str, birth_day: int, birth_month: int, birth_year: int):
         try: 
@@ -20,4 +24,4 @@ class LoginController():
             self.login_view.print_error_message(e.args[0])
         else:
             self.login_view.print_validation_message('Utilisateur créé.')
-            self.app_controller.complete_user_registration(user_id)
+            self.app_controller.complete_user_registration(user_id, self.variables)
