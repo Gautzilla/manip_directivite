@@ -94,7 +94,7 @@ class RecordingsFilterView(ctk.CTkFrame):
 
         for index, (variable, levels) in enumerate(variables.items()):
             self.variables.append(self.VariableFilter(self, variable_name = variable, variable_levels = levels, callback = self.set_recording_filter))
-            self.variables[-1].grid(column = 0, row = index + 1, padx = 10, pady = 10, sticky = 'sew')
+            self.variables[-1].grid(column = 0, row = index + 1, padx = 2, pady = 2, sticky = 'sew')
 
         self.set_recording_filter()
     
