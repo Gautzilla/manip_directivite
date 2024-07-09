@@ -4,8 +4,9 @@ from model.queries import *
 from itertools import product
 import pandas as pd
 from model import Session
+from os import path
 
-SENTENCES_CSV_FILE = r'data\sentences.csv'
+SENTENCES_CSV_FILE = path.abspath('data/sentences.csv')
 RECORDINGS_TO_DUPLICATE_IN_BOTH_ROOMS = [61,141]
 RECORDINGS_TO_REJECT = [40, 54, 117, 120]
 REJECTED_RECORDINGS_RATIO = 1/3

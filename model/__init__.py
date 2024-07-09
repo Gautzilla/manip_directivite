@@ -1,8 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from os.path import exists
+from os import path
 
-DATABASE_PATH = 'data/manip_directivite.db'
+DATABASE_PATH = path.abspath('data/manip_directivite.db')
 
 Base = declarative_base()
 
