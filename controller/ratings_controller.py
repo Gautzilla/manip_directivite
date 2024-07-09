@@ -5,7 +5,7 @@ from os import path
 
 class RatingsController():
 
-    MEDIA_FOLDER = path.abspath(r'data\audio')
+    MEDIA_FOLDER = path.abspath(r'data/audio')
 
     def __init__(self, app_controller, app_view: AppView, user_id: int, variables: dict):
         self.app_controller = app_controller
