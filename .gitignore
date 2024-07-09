@@ -161,3 +161,4 @@ cython_debug/
 
 database.svg
 data/audio/*.wav
+data/manip_directivite.db
