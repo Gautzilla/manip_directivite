@@ -36,6 +36,7 @@ class RatingsController():
             play_sound(file)
             self.ratings_view.reset_sliders()
             self.ratings_view.disable_validate_button(recording_duration)
+            self.ratings_view.display_soundfile_name(soundfile = path.basename(file))
             self.update_progress()
         except Exception as e:
             self.ratings_view.display_soundfile_error(soundfile = file)

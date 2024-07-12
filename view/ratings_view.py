@@ -43,8 +43,8 @@ class RatingsView(ctk.CTkFrame):
         self.progress_bar = ctk.CTkProgressBar(master = self)
         self.progress_bar.grid_configure(row = 3, column = 0, columnspan = 3, padx = 0, pady = (10,0), sticky = 'new')
 
-        self.error_display = ctk.CTkLabel(master = self, text = '', text_color = '#8d2929')
-        self.error_display.grid_configure(row = 4, column = 0, columnspan = 3, padx = 10, pady = (10,0))  
+        self.text_display = ctk.CTkLabel(master = self, text = '', text_color = '#8d2929')
+        self.text_display.grid_configure(row = 4, column = 0, columnspan = 3, padx = 10, pady = (10,0))  
 
     def validate(self):
         if self.validate_btn.cget('state') == 'disabled':
@@ -67,4 +67,7 @@ class RatingsView(ctk.CTkFrame):
 
     def display_soundfile_error(self, soundfile: str):
         self.validate_btn.configure(state = 'disabled')
-        self.error_display.configure(text = f'Impossible d\'ouvrir {soundfile}')
+        self.text_display.configure(text = f'Impossible d\'ouvrir {soundfile}', text_color = '#8d2929')
+
+    def display_soundfile_name(self, soundfile: str):
+        self.text_display.configure(text = soundfile, text_color = '#4e4e4e')
