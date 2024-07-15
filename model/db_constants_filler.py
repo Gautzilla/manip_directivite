@@ -7,8 +7,8 @@ from model import Session
 from os import path
 
 SENTENCES_CSV_FILE = path.abspath('data/sentences.csv')
-RECORDINGS_TO_DUPLICATE_IN_BOTH_ROOMS = [61,141]
-RECORDINGS_TO_REJECT = [40, 54, 117, 120]
+RECORDINGS_TO_DUPLICATE_IN_BOTH_ROOMS = [61,141, 118, 133, 82, 118, 24]
+RECORDINGS_TO_REJECT = [40, 54, 117, 120, 134, 127, 94, 45, 13, 134, 20]
 REJECTED_RECORDINGS_RATIO = 1/3
 ROOMS = [Room(0, 'CLOUS', 0.5), Room(1, 'SUAPS', 2.)]
 
@@ -61,8 +61,14 @@ def create_recordings(recordings: pd.DataFrame):
 
         for index, recording in recordings.iterrows():
 
+            id = recording.loc['ID']
+            rec_room_attribution = recording.loc['M_r'] # 0: Clous, 1: Suaps, 2: Rejected
+
             # Rejected recording
-            if recording.loc['M_r'] == 2:
+            if rec_room_attribution == 2:
+                continue
+
+            if id in RECORDINGS_TO_REJECT:
                 continue
 
             # Get corresponding IDs in the db
@@ -73,26 +79,22 @@ def create_recordings(recordings: pd.DataFrame):
             movement = recording.loc['M']
             repetition = recording.loc['N']
             rec_repetition = recording.loc['Rec_N']
-            rec_repetition_rating = recording.loc['M_r']
             sentence_id = get_sentence_by_attributes(Sentence(text = text, amplitude = amplitude), session).id
             conditions_id_human = get_conditions_by_attributes(Condition(distance = distance, angle = angle, movement = movement, source = 'Human'), session).id
             conditions_id_loudspeaker = get_conditions_by_attributes(Condition(distance = distance, angle = angle, movement = movement, source = 'Loudspeaker'), session).id
 
-            # Special cases:
-            if recording.loc['ID'] in RECORDINGS_TO_REJECT:
-                continue
-            if recording.loc['ID'] in RECORDINGS_TO_DUPLICATE_IN_BOTH_ROOMS:
+            # Special cases:            
+            if id in RECORDINGS_TO_DUPLICATE_IN_BOTH_ROOMS:
                 for conditions_id in [conditions_id_human, conditions_id_loudspeaker]:
                     for room_id in [0,1]:
-                        rec = Recording(room_id, conditions_id, sentence_id, repetition, rec_repetition, rec_repetition_rating)
+                        rec = Recording(room_id, conditions_id, sentence_id, repetition, rec_repetition, rec_room_attribution)
                         if get_recording_by_attributes(rec, session) is not None:
                             continue
                         add_recording(rec, session)
                 continue
-
-            room_id = recording.loc['M_r']
+            
             for conditions_id in [conditions_id_human, conditions_id_loudspeaker]:
-                rec = Recording(room_id, conditions_id, sentence_id, repetition, rec_repetition, rec_repetition_rating)
+                rec = Recording(rec_room_attribution, conditions_id, sentence_id, repetition, rec_repetition, rec_room_attribution)
                 if get_recording_by_attributes(rec, session) is not None:
                     continue
                 add_recording(rec, session)
@@ -115,7 +117,7 @@ def add_audio_file_names():
             amplitude = sentence.amplitude
 
             audio_file_name = '_'.join(['KU100', room, source, distance, angle, movement, repetition, rec_repetition, amplitude, rec_repetition_rating]) + '.wav'
-            recording.audio_file = audio_file_name
+            recording.set_audio_file(audio_file_name)
 
         session.commit()
 
