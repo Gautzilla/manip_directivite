@@ -33,6 +33,7 @@ class RatingsView(ctk.CTkFrame):
         self.controller = controller
 
         self.copy_image = Image.open(path.abspath(r'data/assets/copy_to_clipboard.png'))
+        self.copy_image_done = Image.open(path.abspath(r'data/assets/copy_to_clipboard_done.png'))
 
         self.text_variable = ctk.StringVar(value = '')
         self.copy_text_image = ctk.CTkImage(light_image = self.copy_image, dark_image = self.copy_image, size = (22, 28))
@@ -82,6 +83,9 @@ class RatingsView(ctk.CTkFrame):
     def display_soundfile_name(self, soundfile: str):
         self.text_variable.set(soundfile)
         self.text_display.configure(text_color = 'gray10')
+        self.copy_text_image.configure(light_image = self.copy_image, dark_image = self.copy_image)
 
     def copy_text(self):
         pyperclip.copy(self.text_variable.get())
+        self.text_display.configure(text_color = 'gray10')
+        self.copy_text_image.configure(light_image = self.copy_image_done, dark_image = self.copy_image_done)
