@@ -52,8 +52,8 @@ class RatingsView(ctk.CTkFrame):
         self.progress_bar = ctk.CTkProgressBar(master = self)
         self.progress_bar.grid_configure(row = 3, column = 0, columnspan = 3, padx = 0, pady = (10,0), sticky = 'new')
 
-        self.text_display = ctk.CTkButton(master = self, textvariable = self.text_variable, text_color = '#8d2929', fg_color = 'gray20', hover = False, image = self.copy_text_image, command = self.copy_text, height = 28)
-        self.text_display.grid_configure(row = 4, column = 0, columnspan = 3, padx = 10, pady = (10,0))
+        self.text_display = ctk.CTkButton(master = self, textvariable = self.text_variable, text_color = '#8d2929', fg_color = 'gray20', hover = False, image = self.copy_text_image, command = self.copy_text, width = 300)
+        self.text_display.grid_configure(row = 4, column = 0, columnspan = 3, padx = 0, pady = (10,0), sticky = 'sew')
 
     def validate(self):
         if self.validate_btn.cget('state') == 'disabled':
