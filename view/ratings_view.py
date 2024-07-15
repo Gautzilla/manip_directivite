@@ -1,4 +1,7 @@
 import customtkinter as ctk
+from tkinter import PhotoImage
+from os import path
+import pyperclip
 
 class Rating(ctk.CTkFrame):
     def __init__(self, master, attribute_name):
@@ -19,6 +22,7 @@ class Rating(ctk.CTkFrame):
     
     def reset(self):
         self.slider.set(.5)
+        
 
 class RatingsView(ctk.CTkFrame):
     def __init__(self, master, controller):
@@ -27,6 +31,9 @@ class RatingsView(ctk.CTkFrame):
         self.grid_rowconfigure((0,3), weight = 1)
 
         self.controller = controller
+
+        self.text_variable = ctk.StringVar(value = '')
+        self.copy_text_image = PhotoImage(file = path.abspath(r'data/assets/copy_to_clipboard.png'))
 
         self.timbre_rating = Rating(master = self, attribute_name = 'Timbre')
         self.timbre_rating.grid_configure(row = 1, column = 0, padx = (20,0), pady = (10,0), sticky = 'new')
@@ -43,8 +50,8 @@ class RatingsView(ctk.CTkFrame):
         self.progress_bar = ctk.CTkProgressBar(master = self)
         self.progress_bar.grid_configure(row = 3, column = 0, columnspan = 3, padx = 0, pady = (10,0), sticky = 'new')
 
-        self.text_display = ctk.CTkLabel(master = self, text = '', text_color = '#8d2929')
-        self.text_display.grid_configure(row = 4, column = 0, columnspan = 3, padx = 10, pady = (10,0))  
+        self.text_display = ctk.CTkButton(master = self, textvariable = self.text_variable, text_color = '#8d2929', image = self.copy_text_image, command = self.copy_text, height = 28)
+        self.text_display.grid_configure(row = 4, column = 0, columnspan = 3, padx = 10, pady = (10,0))
 
     def validate(self):
         if self.validate_btn.cget('state') == 'disabled':
@@ -67,7 +74,12 @@ class RatingsView(ctk.CTkFrame):
 
     def display_soundfile_error(self, soundfile: str):
         self.validate_btn.configure(state = 'disabled')
-        self.text_display.configure(text = f'Impossible d\'ouvrir {soundfile}', text_color = '#8d2929')
+        self.text_variable.set(f'Impossible d\'ouvrir {soundfile}')
+        self.text_display.configure(text_color = '#8d2929')
 
     def display_soundfile_name(self, soundfile: str):
-        self.text_display.configure(text = soundfile, text_color = '#4e4e4e')
+        self.text_variable.set(soundfile)
+        self.text_display.configure(text_color = '#4e4e4e')
+
+    def copy_text(self):
+        pyperclip.copy(self.text_variable.get())
