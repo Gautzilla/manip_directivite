@@ -7,8 +7,10 @@ class AppView(ctk.CTk):
     def __init__(self, controller):
         super().__init__()
 
+        ctk.set_appearance_mode("dark")
+
         self.title('MANIP')
-        self.after(0, lambda:self.state('zoomed'))
+        self.after(0, lambda:self.state('zoomed'))        
 
     def show_login(self, controller, users: dict, variables: dict) -> LoginView:
 
