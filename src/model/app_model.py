@@ -1,4 +1,4 @@
-from model import db_constants_filler
+from src.model import db_constants_filler
 
 class AppModel():
     

@@ -1,7 +1,7 @@
-from model.queries import get_user_by_attributes, add_user, get_uncomplete_users as get_uncomplete_users_db
-from model.models import User
+from src.model.queries import get_user_by_attributes, add_user, get_uncomplete_users as get_uncomplete_users_db
+from src.model.models import User
 from datetime import date
-from model import Session
+from src.model import Session
 
 def register_user(first_name: str, last_name: str, birth_day: str, birth_month: str, birth_year: str) -> int:
     

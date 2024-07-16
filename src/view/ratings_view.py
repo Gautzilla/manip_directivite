@@ -2,6 +2,7 @@ import customtkinter as ctk
 from os import path
 import pyperclip
 from PIL import Image
+from src import ASSETS_FOLDER
 
 class Rating(ctk.CTkFrame):
     def __init__(self, master, attribute_name):
@@ -32,8 +33,8 @@ class RatingsView(ctk.CTkFrame):
 
         self.controller = controller
 
-        self.copy_image = Image.open(path.abspath(r'data/assets/copy_to_clipboard.png'))
-        self.copy_image_done = Image.open(path.abspath(r'data/assets/copy_to_clipboard_done.png'))
+        self.copy_image = Image.open(path.join(ASSETS_FOLDER,'copy_to_clipboard.png'))
+        self.copy_image_done = Image.open(path.join(ASSETS_FOLDER,'copy_to_clipboard_done.png'))
 
         self.text_variable = ctk.StringVar(value = '')
         self.copy_text_image = ctk.CTkImage(light_image = self.copy_image, dark_image = self.copy_image, size = (22, 28))

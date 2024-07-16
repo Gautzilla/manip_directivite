@@ -1,6 +1,6 @@
 import customtkinter as ctk
-from view.login_view import LoginView
-from view.ratings_view import RatingsView
+from src.view.login_view import LoginView
+from src.view.ratings_view import RatingsView
 
 class AppView(ctk.CTk):
 

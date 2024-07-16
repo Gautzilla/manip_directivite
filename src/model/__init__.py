@@ -1,13 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from os.path import exists
-from os import path
-
-DATABASE_PATH = path.abspath('data/manip_directivite.db')
+from src import DATABASE_PATH
 
 Base = declarative_base()
 
-from model.models import *
+from src.model.models import *
 
 engine = create_engine(f'sqlite:///{DATABASE_PATH}', echo = False)
 

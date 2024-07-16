@@ -1,4 +1,4 @@
-from model.models import Room, Condition, User, Sentence, Recording, Rating
+from src.model.models import Room, Condition, User, Sentence, Recording, Rating
 from sqlalchemy import select, and_
 
 JOINED_TABLES = select(Recording.id).join(Room, Room.id == Recording.room_id).join(Condition, Condition.id == Recording.conditions_id).join(Sentence, Sentence.id == Recording.sentence_id)

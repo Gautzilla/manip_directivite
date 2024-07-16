@@ -1,7 +1,7 @@
-from model import Session
-from model.queries import filter_recordings_in_session, get_unrated_recordings, get_recording, write_ratings as write_to_db, get_nb_completed_ratings, get_nb_recordings
+from src.model import Session
+from src.model.queries import filter_recordings_in_session, get_unrated_recordings, get_recording, write_ratings as write_to_db, get_nb_completed_ratings, get_nb_recordings
 from random import choice
-from model.models import Rating
+from src.model.models import Rating
 
 def filter_recordings(variables: dict) -> None:
     rooms = variables['Room']

@@ -1,7 +1,7 @@
-from model.app_model import AppModel
-from view.app_view import AppView
-from controller.login_controller import LoginController
-from controller.ratings_controller import RatingsController
+from src.model.app_model import AppModel
+from src.view.app_view import AppView
+from src.controller.login_controller import LoginController
+from src.controller.ratings_controller import RatingsController
 
 
 class AppController():

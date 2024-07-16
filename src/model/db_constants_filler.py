@@ -1,12 +1,11 @@
-from model.models import Room, Condition, Sentence, Recording
+from src.model.models import Room, Condition, Sentence, Recording
 from data.independant_variables import Source, Distance, Angle
-from model.queries import *
+from src.model.queries import *
 from itertools import product
 import pandas as pd
-from model import Session
-from os import path
+from src.model import Session
+from src import SENTENCES_CSV_FILE
 
-SENTENCES_CSV_FILE = path.abspath('data/sentences.csv')
 RECORDINGS_TO_DUPLICATE_IN_BOTH_ROOMS = [61,141, 118, 133, 82, 118, 24]
 RECORDINGS_TO_REJECT = [40, 54, 117, 120, 134, 127, 94, 45, 13, 134, 20]
 REJECTED_RECORDINGS_RATIO = 1/3

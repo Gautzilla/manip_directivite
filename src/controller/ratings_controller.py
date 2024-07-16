@@ -1,11 +1,10 @@
-from view.app_view import AppView
-from model.ratings_model import filter_recordings, get_next_recording_id, get_recording_filename, write_ratings, get_progress
-from model.audio_player_model import get_sound_duration, play_sound
+from src.view.app_view import AppView
+from src.model.ratings_model import filter_recordings, get_next_recording_id, get_recording_filename, write_ratings, get_progress
+from src.model.audio_player_model import get_sound_duration, play_sound
 from os import path
+from src import AUDIO_FOLDER
 
 class RatingsController():
-
-    MEDIA_FOLDER = path.abspath(r'data/audio')
 
     def __init__(self, app_controller, app_view: AppView, user_id: int, variables: dict):
         self.app_controller = app_controller
@@ -29,7 +28,7 @@ class RatingsController():
     def play_next_recording(self):
         #TODO: remove next line when the correct audios will be added
         # self.recording_filename = r'C:\Users\labsticc\Desktop\pink_noise.wav'
-        file = path.join(self.MEDIA_FOLDER, self.recording_filename)
+        file = path.join(AUDIO_FOLDER, self.recording_filename)
 
         try:            
             recording_duration = get_sound_duration(path = file)

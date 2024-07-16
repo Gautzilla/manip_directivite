@@ -1,6 +1,6 @@
-from model.login_model import register_user as register_user_model, get_uncomplete_users
-from model.db_constants_filler import get_variables
-from view.app_view import AppView
+from src.model.login_model import register_user as register_user_model, get_uncomplete_users
+from src.model.db_constants_filler import get_variables
+from src.view.app_view import AppView
 
 class LoginController():
     def __init__(self, app_controller, app_view: AppView):

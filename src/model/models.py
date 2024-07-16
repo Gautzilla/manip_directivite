@@ -1,6 +1,6 @@
 from sqlalchemy import ForeignKey, Column, String, Integer, CHAR, VARCHAR, DATE, FLOAT, BOOLEAN
 import datetime
-from model import Base
+from src.model import Base
 
 class Recording(Base):
     __tablename__ = 'recordings'
