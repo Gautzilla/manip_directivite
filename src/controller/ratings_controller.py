@@ -39,6 +39,7 @@ class RatingsController():
             self.update_progress()
         except Exception as e:
             self.ratings_view.display_soundfile_error(soundfile = file)
+            raise e
 
     def update_progress(self):
         progress = get_progress(self.user_id)
