@@ -45,5 +45,6 @@ class RatingsController():
         self.ratings_view.set_progress(progress)
 
     def register_rating(self, ratings: tuple, answers: dict):
-        write_ratings(ratings, self.user_id, self.recording.id)
+        result = check_answers(user_answers = answers, correct_answers = self.correct_answers)
+        write_ratings(ratings = ratings, answers = result, user_id = self.user_id, recording_id = self.recording.id)
         self.load_next_recording()
