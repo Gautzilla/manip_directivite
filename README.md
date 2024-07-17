@@ -2,7 +2,10 @@
 
 ## Aim of the application
 
-This MVC software was developped for a psychoacoustics experiment. During the experiment, binaural recordings will be presented to listeners, whose task is to rate each recording on the basis of 3 attributes: the **Timbre**, the **Apparent Source Width** and the **Plausibility**.
+This MVC software was developped for a psychoacoustics experiment. During the experiment, binaural recordings will be presented to listeners, whose tasks are to:
+- Rate each recording on the basis of 2 attributes: the **Timbre** and the **Plausibility**.
+- Indicate whether they perceive the source incidence angle as being **Frontal** (facing towards them) or **Lateral** (facing to the side).
+- Indicate whether they perceive the source as being **Dynamic** (performing 3DOF movements) or **Static**.
 
 ## Description of the recordings
 
@@ -19,7 +22,7 @@ All these sentences are stored in the `data/sentences.csv` file. This file is us
 
 ## Database
 
-The database contains a table storing all **recordings**, gathered from the `data/sentences.csv` file. Each **user** will complete one set of **rating** (containing a value for each of the 3 rated attributes) for each **recording**:
+The database contains a table storing all **recordings**, gathered from the `data/sentences.csv` file. Each **user** will complete one set of **rating** (containing a value for each of the 2 rated attributes and for the 2 direct questions) for each **recording**:
 
 ![Database graph](data/assets/database.png)
 
@@ -51,4 +54,4 @@ the **RatingsController**, along with a ratings view (`src/view/ratings_view.py`
 
 Before each rating, the ratings model queries the database for a random recording that has not yet been rated by the logged user. If there is no such recording, the test ends. Otherwise, the ratings view is reset and the audio file matching the selected recording is played (through the **audio player model** `src/model/audio_player_model.py` that uses the `pygame` package). 
 
-The user is free to adjust the sliders matching their rating for each attribute for the current recording. Once the playback is done, the user is free to validate the ratings and advance to the next recording.
+During playback, the user is free to adjust the sliders matching their rating for each attribute and to select their answer for each direct question. Once the playback is done and the direct questions are answered, the user is free to validate and advance to the next recording.

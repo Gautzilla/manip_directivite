@@ -27,10 +27,10 @@ def get_recording_filename(id: int) -> str:
         return recording.audio_file
     
 def write_ratings(ratings: tuple, answers: dict, user_id: int, recording_id: int):
-    timbre, source_width, plausibility = ratings
+    timbre, plausibility = ratings
     angle = answers['angle']
     movement = answers['movement']
-    r = Rating(plausibility = plausibility, source_width = source_width, timbre = timbre, angle = angle, movement = movement, user_id = user_id, recording_id = recording_id)
+    r = Rating(plausibility = plausibility, timbre = timbre, angle = angle, movement = movement, user_id = user_id, recording_id = recording_id)
     with Session() as session:
         write_to_db(r, session)
         session.commit()

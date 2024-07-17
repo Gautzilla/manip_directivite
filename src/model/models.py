@@ -71,14 +71,12 @@ class Rating(Base):
     user_id = Column(Integer, ForeignKey('users.id'))
     recording_id = Column(Integer, ForeignKey('recordings.id'))
     plausibility = Column('plausibility', FLOAT)
-    source_width = Column('source_width', FLOAT)
     timbre = Column('timbre', FLOAT)
     angle = Column('angle', BOOLEAN)
     movement = Column('movement', BOOLEAN)
 
-    def __init__(self, plausibility: float, source_width: float, timbre: float, user_id: int, recording_id: int, angle: bool, movement: bool):
+    def __init__(self, plausibility: float, timbre: float, user_id: int, recording_id: int, angle: bool, movement: bool):
         self.plausibility = plausibility
-        self.source_width = source_width
         self.user_id = user_id
         self.recording_id = recording_id
         self.timbre = timbre
