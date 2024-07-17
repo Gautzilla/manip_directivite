@@ -29,7 +29,7 @@ class DirectQuestion(ctk.CTkFrame):
         super().__init__(master)
 
         self.choices = choices
-        self.answer_callback = answer_callback
+        self.callback = answer_callback
         self.answer = None
         self.correct_answer = None
 
@@ -53,12 +53,15 @@ class DirectQuestion(ctk.CTkFrame):
 
     def set_choice(self, choice: int):
         self.answer = choice == self.correct_answer
-        self.answer_callback()
+        self.callback()
         
         not_chosen = (choice-1)**2
 
         self.choice_buttons[choice].configure(fg_color = '#00966b')
         self.choice_buttons[not_chosen].configure(fg_color = 'grey25')
+
+    def get_answer(self) -> bool:
+        return self.answer
         
 
 class RatingsView(ctk.CTkFrame):
@@ -68,6 +71,12 @@ class RatingsView(ctk.CTkFrame):
         self.grid_rowconfigure((0,3), weight = 1)
 
         self.controller = controller
+
+        self.direct_questions = []
+        self.answers = []
+
+        self.done_playing = False
+        self.done_answering = False
 
         self.copy_image = Image.open(path.join(ASSETS_FOLDER,'copy_to_clipboard.png'))
         self.copy_image_done = Image.open(path.join(ASSETS_FOLDER,'copy_to_clipboard_done.png'))
@@ -86,9 +95,11 @@ class RatingsView(ctk.CTkFrame):
 
         self.angle_direct_question = DirectQuestion(master = self, choices = ('Frontal', 'Latéral'), answer_callback = self.check_all_direct_questions_answered)
         self.angle_direct_question.grid_configure(row = 2, column = 0, columnspan = 3, padx = 0, pady = (20,0), sticky = 'new')
-        
+        self.direct_questions.append(self.angle_direct_question)
+
         self.movement_direct_question = DirectQuestion(master = self, choices = ('Statique', 'Dynamique'), answer_callback = self.check_all_direct_questions_answered)
         self.movement_direct_question.grid_configure(row = 3, column = 0, columnspan = 3, padx = 0, pady = (20,0), sticky = 'new')
+        self.direct_questions.append(self.movement_direct_question)
 
         self.validate_btn = ctk.CTkButton(master = self, width = 50, text = 'Valider', command = self.validate)
         self.validate_btn.grid_configure(row = 4, column = 0, columnspan = 3, padx = 0, pady = (20,0), sticky = 'new')
@@ -100,7 +111,16 @@ class RatingsView(ctk.CTkFrame):
         self.text_display.grid_configure(row = 6, column = 0, columnspan = 3, padx = 0, pady = (10,0), sticky = 'sew')
 
     def check_all_direct_questions_answered(self):
-        pass
+        self.answers = []
+
+        for direct_question in self.direct_questions:
+            self.answers.append(direct_question.get_answer())
+
+        if None in self.answers:
+            return
+        self.done_answering = True
+        self.check_done_answering()
+        
 
     def validate(self):
         if self.validate_btn.cget('state') == 'disabled':
@@ -113,12 +133,20 @@ class RatingsView(ctk.CTkFrame):
 
     def disable_validate_button(self, sound_duration_ms: int):
         self.validate_btn.configure(state = 'disabled')
-        self.after(sound_duration_ms, self.allow_rating)
+        self.after(sound_duration_ms, self.end_sound_play)
+
+    def end_sound_play(self):
+        self.done_playing = True
+        self.check_done_answering()
 
     def set_progress(self, progress: float):
         self.progress_bar.set(progress)
 
-    def allow_rating(self):
+    def check_done_answering(self):
+        if not self.done_playing:
+            return
+        if not self.done_answering:
+            return
         self.validate_btn.configure(state = 'normal')
 
     def display_soundfile_error(self, soundfile: str):
