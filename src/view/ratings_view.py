@@ -23,6 +23,27 @@ class Rating(ctk.CTkFrame):
     
     def reset(self):
         self.slider.set(.5)
+
+class DirectQuestion(ctk.CTkFrame):
+    def __init__(self, master, choices: tuple, answer_callback: callable):
+
+        self.choices = choices
+        self.answer_callback = answer_callback
+        self.answer = None
+        
+        self.choice_1 = ctk.CTkButton(master = self, text = self.choices[0], command = self.set_choice(0))
+        self.choice_1.grid_configure(row = 0, column = 0, padx = (10,0), pady = 10, sticky = 'nw')
+
+        self.choice_2 = ctk.CTkButton(master = self, text = self.choices[1], command = self.set_choice(1))
+        self.choice_2.grid_configure(row = 0, column = 1, padx = 10, pady = 10, sticky = 'ne')
+
+    def set_correct_answer(self, answer: int):
+        self.correct_answer = answer
+        self.answer = None
+
+    def set_choice(self, choice: int):
+        self.answer = choice == self.correct_answer
+        self.answer_callback()
         
 
 class RatingsView(ctk.CTkFrame):
