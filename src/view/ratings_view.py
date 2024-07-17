@@ -25,7 +25,7 @@ class Rating(ctk.CTkFrame):
         self.slider.set(.5)
 
 class DirectQuestion(ctk.CTkFrame):
-    def __init__(self, master, choices: tuple, name: str, answer_callback: callable, answers: tuple):
+    def __init__(self, master, choices: tuple, name: str, displayed_name: str, answer_callback: callable, answers: tuple):
         super().__init__(master)
 
         self.name = name
@@ -35,13 +35,17 @@ class DirectQuestion(ctk.CTkFrame):
         self.answer = None
 
         self.columnconfigure((0,3), weight = 1)
+
+        self.displayed_name = ctk.CTkLabel(master = self, text = displayed_name)
+        self.displayed_name.grid_configure(row = 0, column = 1, columnspan = 2, padx = 10, pady = 5, sticky = 'new')
         
         self.choice_1 = ctk.CTkButton(master = self, text = self.choices[0])
-        self.choice_1.grid_configure(row = 0, column = 1, padx = (10,0), pady = 10, sticky = 'nw')
+        self.choice_1.grid_configure(row = 1, column = 1, padx = 10, pady = (0,10), sticky = 'nw')
 
         self.choice_2 = ctk.CTkButton(master = self, text = self.choices[1])
-        self.choice_2.grid_configure(row = 0, column = 2, padx = 10, pady = 10, sticky = 'ne')
+        self.choice_2.grid_configure(row = 1, column = 2, padx = 10, pady = (0,10), sticky = 'ne')
 
+        
         self.choice_buttons = (self.choice_1, self.choice_2)
 
         for index, button in enumerate(self.choice_buttons):
@@ -93,11 +97,11 @@ class RatingsView(ctk.CTkFrame):
         self.plausibility_rating = Rating(master = self, attribute_name = 'Plausibilité')
         self.plausibility_rating.grid_configure(row = 1, column = 2, padx = 20, pady = (10,0), sticky = 'new')
 
-        self.angle_direct_question = DirectQuestion(master = self, choices = ('Frontal', 'Latéral'), name = 'angle', answers = ('Front', 'Side'), answer_callback = self.check_all_direct_questions_answered)
+        self.angle_direct_question = DirectQuestion(master = self, choices = ('Frontal', 'Latéral'), name = 'angle', displayed_name = 'Angle', answers = ('Front', 'Side'), answer_callback = self.check_all_direct_questions_answered)
         self.angle_direct_question.grid_configure(row = 2, column = 0, columnspan = 4, padx = 0, pady = (20,0), sticky = 'new')
         self.direct_questions.append(self.angle_direct_question)
 
-        self.movement_direct_question = DirectQuestion(master = self, choices = ('Statique', 'Dynamique'), name = 'movement', answers = (False, True), answer_callback = self.check_all_direct_questions_answered)
+        self.movement_direct_question = DirectQuestion(master = self, choices = ('Statique', 'Dynamique'), name = 'movement', displayed_name = 'Mouvement', answers = (False, True), answer_callback = self.check_all_direct_questions_answered)
         self.movement_direct_question.grid_configure(row = 3, column = 0, columnspan = 4, padx = 0, pady = (20,0), sticky = 'new')
         self.direct_questions.append(self.movement_direct_question)
 
