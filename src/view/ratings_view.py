@@ -26,15 +26,17 @@ class Rating(ctk.CTkFrame):
 
 class DirectQuestion(ctk.CTkFrame):
     def __init__(self, master, choices: tuple, answer_callback: callable):
+        super().__init__(master)
 
         self.choices = choices
         self.answer_callback = answer_callback
         self.answer = None
+        self.correct_answer = None
         
-        self.choice_1 = ctk.CTkButton(master = self, text = self.choices[0], command = self.set_choice(0))
+        self.choice_1 = ctk.CTkButton(master = self, text = self.choices[0], command = self.set_choice(choice = 0))
         self.choice_1.grid_configure(row = 0, column = 0, padx = (10,0), pady = 10, sticky = 'nw')
 
-        self.choice_2 = ctk.CTkButton(master = self, text = self.choices[1], command = self.set_choice(1))
+        self.choice_2 = ctk.CTkButton(master = self, text = self.choices[1], command = self.set_choice(choice = 1))
         self.choice_2.grid_configure(row = 0, column = 1, padx = 10, pady = 10, sticky = 'ne')
 
     def set_correct_answer(self, answer: int):
@@ -69,14 +71,23 @@ class RatingsView(ctk.CTkFrame):
         self.plausibility_rating = Rating(master = self, attribute_name = 'Plausibilité')
         self.plausibility_rating.grid_configure(row = 1, column = 2, padx = 20, pady = (10,0), sticky = 'new')
 
+        self.angle_direct_question = DirectQuestion(master = self, choices = ('Frontal', 'Latéral'), answer_callback = self.check_all_direct_questions_answered)
+        self.angle_direct_question.grid_configure(row = 2, column = 0, columnspan = 3, padx = 0, pady = (20,0), sticky = 'new')
+        
+        self.movement_direct_question = DirectQuestion(master = self, choices = ('Statique', 'Dynamique'), answer_callback = self.check_all_direct_questions_answered)
+        self.movement_direct_question.grid_configure(row = 3, column = 0, columnspan = 3, padx = 0, pady = (20,0), sticky = 'new')
+
         self.validate_btn = ctk.CTkButton(master = self, width = 50, text = 'Valider', command = self.validate)
-        self.validate_btn.grid_configure(row = 2, column = 0, columnspan = 3, padx = 0, pady = (20,0), sticky = 'new')
+        self.validate_btn.grid_configure(row = 4, column = 0, columnspan = 3, padx = 0, pady = (20,0), sticky = 'new')
 
         self.progress_bar = ctk.CTkProgressBar(master = self)
-        self.progress_bar.grid_configure(row = 3, column = 0, columnspan = 3, padx = 0, pady = (10,0), sticky = 'new')
+        self.progress_bar.grid_configure(row = 5, column = 0, columnspan = 3, padx = 0, pady = (10,0), sticky = 'new')
 
         self.text_display = ctk.CTkButton(master = self, textvariable = self.text_variable, text_color = '#8d2929', fg_color = 'gray20', hover = False, image = self.copy_text_image, command = self.copy_text, width = 300)
-        self.text_display.grid_configure(row = 4, column = 0, columnspan = 3, padx = 0, pady = (10,0), sticky = 'sew')
+        self.text_display.grid_configure(row = 6, column = 0, columnspan = 3, padx = 0, pady = (10,0), sticky = 'sew')
+
+    def check_all_direct_questions_answered(self):
+        pass
 
     def validate(self):
         if self.validate_btn.cget('state') == 'disabled':
