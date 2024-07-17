@@ -25,13 +25,14 @@ class Rating(ctk.CTkFrame):
         self.slider.set(.5)
 
 class DirectQuestion(ctk.CTkFrame):
-    def __init__(self, master, choices: tuple, answer_callback: callable):
+    def __init__(self, master, choices: tuple, name: str, answer_callback: callable, answers: tuple):
         super().__init__(master)
 
+        self.name = name
         self.choices = choices
         self.callback = answer_callback
+        self.answers = answers
         self.answer = None
-        self.correct_answer = None
 
         self.columnconfigure((0,3), weight = 1)
         
@@ -47,12 +48,13 @@ class DirectQuestion(ctk.CTkFrame):
             button.configure(command = lambda index = index: self.set_choice(index), hover = False)
             button.configure(fg_color = 'grey25')
 
-    def set_correct_answer(self, answer: int):
-        self.correct_answer = answer
+    def reset(self) -> None:
         self.answer = None
+        for button in self.choice_buttons:
+            button.configure(fg_color = 'grey25')
 
-    def set_choice(self, choice: int):
-        self.answer = choice == self.correct_answer
+    def set_choice(self, choice: int) -> None:
+        self.answer = self.answers[choice]
         self.callback()
         
         not_chosen = (choice-1)**2
@@ -60,8 +62,8 @@ class DirectQuestion(ctk.CTkFrame):
         self.choice_buttons[choice].configure(fg_color = '#00966b')
         self.choice_buttons[not_chosen].configure(fg_color = 'grey25')
 
-    def get_answer(self) -> bool:
-        return self.answer
+    def get_answer(self) -> tuple:
+        return (self.name, self.answer)
         
 
 class RatingsView(ctk.CTkFrame):
@@ -73,7 +75,7 @@ class RatingsView(ctk.CTkFrame):
         self.controller = controller
 
         self.direct_questions = []
-        self.answers = []
+        self.answers = {}
 
         self.done_playing = False
         self.done_answering = False
@@ -93,11 +95,11 @@ class RatingsView(ctk.CTkFrame):
         self.plausibility_rating = Rating(master = self, attribute_name = 'Plausibilité')
         self.plausibility_rating.grid_configure(row = 1, column = 2, padx = 20, pady = (10,0), sticky = 'new')
 
-        self.angle_direct_question = DirectQuestion(master = self, choices = ('Frontal', 'Latéral'), answer_callback = self.check_all_direct_questions_answered)
+        self.angle_direct_question = DirectQuestion(master = self, choices = ('Frontal', 'Latéral'), name = 'angle', answers = ('Front', 'Side'), answer_callback = self.check_all_direct_questions_answered)
         self.angle_direct_question.grid_configure(row = 2, column = 0, columnspan = 3, padx = 0, pady = (20,0), sticky = 'new')
         self.direct_questions.append(self.angle_direct_question)
 
-        self.movement_direct_question = DirectQuestion(master = self, choices = ('Statique', 'Dynamique'), answer_callback = self.check_all_direct_questions_answered)
+        self.movement_direct_question = DirectQuestion(master = self, choices = ('Statique', 'Dynamique'), name = 'movement', answers = (False, True), answer_callback = self.check_all_direct_questions_answered)
         self.movement_direct_question.grid_configure(row = 3, column = 0, columnspan = 3, padx = 0, pady = (20,0), sticky = 'new')
         self.direct_questions.append(self.movement_direct_question)
 
@@ -111,25 +113,29 @@ class RatingsView(ctk.CTkFrame):
         self.text_display.grid_configure(row = 6, column = 0, columnspan = 3, padx = 0, pady = (10,0), sticky = 'sew')
 
     def check_all_direct_questions_answered(self):
-        self.answers = []
-
         for direct_question in self.direct_questions:
-            self.answers.append(direct_question.get_answer())
+            answer = direct_question.get_answer()
+            self.answers[answer[0]] = answer[1]
 
-        if None in self.answers:
+        if None in self.answers.values():
             return
         self.done_answering = True
         self.check_done_answering()
-        
 
     def validate(self):
         if self.validate_btn.cget('state') == 'disabled':
             return
-        self.controller.register_rating(ratings = tuple([slider.get_score() for slider in [self.timbre_rating, self.source_width_rating, self.plausibility_rating]]))
+        
+        self.controller.register_rating(ratings = tuple([slider.get_score() for slider in [self.timbre_rating, self.source_width_rating, self.plausibility_rating]]), answers = self.answers)
 
-    def reset_sliders(self):
+    def reset(self, direct_question_names: list):
+        self.answers = {}
         for slider in (self.timbre_rating, self.source_width_rating, self.plausibility_rating):
             slider.reset()
+        for name in direct_question_names:
+            self.answers[name] = None
+        for direct_question in self.direct_questions:
+            direct_question.reset()
 
     def disable_validate_button(self, sound_duration_ms: int):
         self.validate_btn.configure(state = 'disabled')

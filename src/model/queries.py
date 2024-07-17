@@ -104,7 +104,7 @@ def get_nb_recordings(session) -> int:
 
 def get_unrated_recordings(user_id: int, session) -> list:
     rated_recordings_subquery = select(Rating.recording_id).filter(Rating.user_id == user_id)
-    unrated_recordings = session.query(Recording.id).where(and_(Recording.id.in_(_recordings_in_session), ~Recording.id.in_(rated_recordings_subquery))).all()
+    unrated_recordings = session.query(Recording).where(and_(Recording.id.in_(_recordings_in_session), ~Recording.id.in_(rated_recordings_subquery))).all()
     return unrated_recordings
 
 def get_recording(id, session) -> Recording:
