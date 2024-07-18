@@ -1,5 +1,30 @@
 import customtkinter as ctk
 
+class UserCreation(ctk.CTkFrame):
+    def __init__(self, master, controller):
+        super().__init__(master)
+
+        self.controller = controller
+
+        self.first_name = ctk.CTkEntry(master = self, placeholder_text = 'Prénom')
+        self.first_name.grid(column = 0, row = 1, columnspan = 3, padx = 40, pady = (10,0), sticky = 'ew')
+
+        self.last_name = ctk.CTkEntry(master = self, placeholder_text = 'Nom')
+        self.last_name.grid(column = 0, row = 2, columnspan = 3, padx = 40, pady = (10,0), sticky = 'ew')
+
+        self.birth_date = BirthDate(master = self)
+        self.birth_date.grid(column = 0, row = 3, columnspan = 3, padx = 10, pady = (10,0), sticky = 'new')
+
+        submit = ctk.CTkButton(master = self, width = 70, text = 'Valider', command = lambda: self.submit())
+        submit.grid(column = 1, row = 4, padx = 0, pady = 10, sticky = 'n')
+
+    def submit(self):  
+        day, month, year = self.birth_date.get_birthdate()
+        first_name = self.first_name.get()
+        last_name = self.last_name.get()
+
+        self.controller.register_user(first_name = first_name, last_name = last_name, birth_day = day, birth_month = month, birth_year = year)
+
 class BirthDate(ctk.CTkFrame):
 
     year_v = 0
@@ -108,12 +133,28 @@ class RecordingsFilterView(ctk.CTkFrame):
 
 class LoginView(ctk.CTkFrame):
 
-    def submit(self):  
-        day, month, year = self.birth_date.get_birthdate()
-        first_name = self.first_name.get()
-        last_name = self.last_name.get()
-        
-        self.controller.register_user(first_name = first_name, last_name = last_name, birth_day = day, birth_month = month, birth_year = year)
+    def __init__(self, master, controller, users: dict, variables: dict):
+        super().__init__(master)
+
+        self.controller = controller
+        self.users = users
+
+        self.grid_rowconfigure((0,4), weight = 1)
+
+        self.pretest_btn = ctk.CTkButton(master = self, text = 'PRETEST', hover = False, font = ('Consolas', 16, 'bold'), text_color = '#00966b', fg_color = 'grey25', command = self.launch_pretest)
+        self.pretest_btn.grid(column = 0, row = 1, padx = 0, pady = (10,0), sticky = 'new')  
+
+        self.user_login = UserCreation(master = self, controller = self.controller)
+        self.user_login.grid(column = 0, row = 2, padx = 0, pady = (50,0), sticky = 'new')        
+
+        self.feedback_message = ctk.CTkLabel(master = self, text = '')
+        self.feedback_message.grid(column = 0, row = 3, padx = 0, pady = (10, 0), sticky = 'new')
+
+        self.variable_filter = RecordingsFilterView(self, controller = self.controller, variables = variables)
+        self.variable_filter.grid(column = 0, row = 5, padx = 10, pady = (10,0), sticky = 'sew')
+
+        self.load_session = LoadSessionView(master = self, controller = self.controller, users = self.users)
+        self.load_session.grid(column = 0, row = 6, padx = 10, pady = 10, sticky = 'sew')
 
     def print_validation_message(self, message: str):
         self.feedback_message.configure(text = message, text_color = '#30693b')
@@ -121,31 +162,5 @@ class LoginView(ctk.CTkFrame):
     def print_error_message(self, message: str):
         self.feedback_message.configure(text = message, text_color = '#8d2929')
 
-    def __init__(self, master, controller, users: dict, variables: dict):
-        super().__init__(master)
-
-        self.controller = controller
-        self.users = users
-
-        self.grid_rowconfigure([0,6], weight = 1)
-
-        self.first_name = ctk.CTkEntry(master = self, placeholder_text = 'Prénom')
-        self.first_name.grid(column = 0, row = 1, columnspan = 3, padx = 40, pady = (10,0), sticky = 'ew')
-
-        self.last_name = ctk.CTkEntry(master = self, placeholder_text = 'Nom')
-        self.last_name.grid(column = 0, row = 2, columnspan = 3, padx = 40, pady = (10,0), sticky = 'ew')
-
-        self.birth_date = BirthDate(master = self)
-        self.birth_date.grid(column = 0, row = 3, columnspan = 3, padx = 10, pady = (10,0), sticky = 'new')
-
-        submit = ctk.CTkButton(master = self, width = 70, text = 'Valider', command = lambda: self.submit())
-        submit.grid(column = 1, row = 4, padx = 0, pady = (10, 0), sticky = 'n')
-
-        self.feedback_message = ctk.CTkLabel(master = self, text = '')
-        self.feedback_message.grid(column = 0, columnspan = 3, row = 5, padx = 0, pady = (10, 0), sticky = 'new')
-
-        self.variable_filter = RecordingsFilterView(self, controller = self.controller, variables = variables)
-        self.variable_filter.grid(column = 0, columnspan = 3, row = 6, padx = 10, pady = (10,0), sticky = 'sew')
-
-        self.load_session = LoadSessionView(master = self, controller = self.controller, users = self.users)
-        self.load_session.grid(column = 0, columnspan = 3, row = 7, padx = 10, pady = 10, sticky = 'sew')
+    def launch_pretest(self):
+        self.controller.launch_pretest()

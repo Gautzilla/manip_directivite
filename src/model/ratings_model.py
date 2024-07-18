@@ -1,5 +1,5 @@
 from src.model import Session
-from src.model.queries import filter_recordings_in_session, get_unrated_recordings, get_recording, write_ratings as write_to_db, get_nb_completed_ratings, get_nb_recordings, get_conditions_from_recording
+from src.model.queries import filter_recordings_in_session, get_pretest_recording, get_unrated_recordings, get_recording, write_ratings as write_to_db, get_nb_completed_ratings, get_nb_recordings, get_conditions_from_recording
 from random import choice
 from src.model.models import Rating, Recording, Condition
 
@@ -12,6 +12,17 @@ def filter_recordings(variables: dict) -> None:
     amplitudes = variables['Amplitude']
     
     filter_recordings_in_session(rooms, distances, angles, movements, sources, amplitudes)
+
+def get_pretest_recordings() -> list:
+
+    pretest_recordings = []
+
+    with Session() as session:
+        pretest_recordings.append(get_pretest_recording(session, room_name = 'CLOUS', sentence_amplitude = 'Small', distance = 1, angle = 'Side', movement = False, source = 'Human'))
+        pretest_recordings.append(get_pretest_recording(session, room_name = 'CLOUS', sentence_amplitude = 'Small', distance = 1, angle = 'Front', movement = False, source = 'Loudspeaker'))
+        pretest_recordings.append(get_pretest_recording(session, room_name = 'SUAPS', sentence_amplitude = 'Large', distance = 4, angle = 'Side', movement = True, source = 'Loudspeaker'))
+        pretest_recordings.append(get_pretest_recording(session, room_name = 'SUAPS', sentence_amplitude = 'Large', distance = 4, angle = 'Front', movement = True, source = 'Human'))
+    return pretest_recordings
 
 def get_next_recording(user_id: int) -> Recording:
     with Session() as session:

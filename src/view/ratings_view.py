@@ -141,6 +141,7 @@ class RatingsView(ctk.CTkFrame):
 
     def disable_validate_button(self, sound_duration_ms: int):
         self.validate_btn.configure(state = 'disabled')
+        self.done_playing = False
         self.after(sound_duration_ms, self.end_sound_play)
 
     def end_sound_play(self):
