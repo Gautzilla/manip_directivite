@@ -1,7 +1,7 @@
 from src.model.app_model import AppModel
 from src.view.app_view import AppView
 from src.controller.login_controller import LoginController
-from src.controller.ratings_controller import RatingsController
+from src.controller.ratings_controller import TestRatingsController
 
 
 class AppController():
@@ -22,7 +22,7 @@ class AppController():
     def complete_user_registration(self, user_id: int, variables: dict):
         self.user_id = user_id
         self.view.close_login_view()
-        ratings_controller = RatingsController(app_controller = self, app_view = self.view, user_id = self.user_id, variables = variables)
+        ratings_controller = TestRatingsController(app_controller = self, app_view = self.view, user_id = self.user_id, variables = variables)
 
     def end_test(self):
         self.view.close_ratings_view()

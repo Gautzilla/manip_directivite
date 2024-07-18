@@ -3,22 +3,16 @@ from src.model.ratings_model import filter_recordings, get_next_recording, get_r
 from src.model.audio_player_model import get_sound_duration, play_sound
 from os import path
 from src import AUDIO_FOLDER
+from abc import ABC, abstractmethod
 
-class RatingsController():
+class RatingsController(ABC):
 
-    def __init__(self, app_controller, app_view: AppView, user_id: int, variables: dict):
-        self.app_controller = app_controller
-        self.app_view = app_view
-        self.user_id = user_id
+    @abstractmethod
+    def __init__(self, app_controller, app_view: AppView, variables: dict, user_id: int = None):
+        pass
 
-        filter_recordings(variables)
-        
-        self.ratings_view = self.app_view.show_ratings(controller = self)
-        self.app_view.set_binding('<Return>', lambda _ : self.ratings_view.validate())
-        self.load_next_recording()
-
+    @abstractmethod
     def load_next_recording(self):
-        self.recording = get_next_recording(user_id = self.user_id)
         if self.recording == None:
             self.app_controller.end_test()
             return
@@ -26,6 +20,7 @@ class RatingsController():
         self.correct_answers = get_correct_answers_from_recording(recording = self.recording) # Facing Angle / Movement
         self.play_next_recording()
 
+    @abstractmethod
     def play_next_recording(self):
         file = path.join(AUDIO_FOLDER, self.recording_filename)
 
@@ -39,6 +34,30 @@ class RatingsController():
         except Exception as e:
             self.ratings_view.display_soundfile_error(soundfile = file)
             raise e
+
+    @abstractmethod
+    def update_progress(self):
+        pass
+
+class TestRatingsController(RatingsController):
+    
+    def __init__(self, app_controller, app_view: AppView, user_id: int, variables: dict):
+        self.app_controller = app_controller
+        self.app_view = app_view
+        self.user_id = user_id
+
+        filter_recordings(variables)
+        
+        self.ratings_view = self.app_view.show_ratings(controller = self)
+        self.app_view.set_binding('<Return>', lambda _ : self.ratings_view.validate())
+        self.load_next_recording()
+
+    def load_next_recording(self):
+        self.recording = get_next_recording(user_id = self.user_id)
+        super().load_next_recording()
+
+    def play_next_recording(self):
+        super().play_next_recording()
 
     def update_progress(self):
         progress = get_progress(self.user_id)
