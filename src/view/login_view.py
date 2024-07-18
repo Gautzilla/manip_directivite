@@ -133,28 +133,34 @@ class RecordingsFilterView(ctk.CTkFrame):
 
 class LoginView(ctk.CTkFrame):
 
-    def print_validation_message(self, message: str):
-        self.feedback_message.configure(text = message, text_color = '#30693b')
-
-    def print_error_message(self, message: str):
-        self.feedback_message.configure(text = message, text_color = '#8d2929')
-
     def __init__(self, master, controller, users: dict, variables: dict):
         super().__init__(master)
 
         self.controller = controller
         self.users = users
 
-        self.grid_rowconfigure((0,3), weight = 1)
+        self.grid_rowconfigure((0,4), weight = 1)
+
+        self.pretest_btn = ctk.CTkButton(master = self, text = 'PRETEST', hover = False, font = ('Consolas', 16, 'bold'), text_color = '#00966b', fg_color = 'grey25', command = self.launch_pretest)
+        self.pretest_btn.grid(column = 0, row = 1, padx = 0, pady = (10,0), sticky = 'new')  
 
         self.user_login = UserCreation(master = self, controller = self.controller)
-        self.user_login.grid(column = 0, row = 1, padx = 0, pady = (10,0), sticky = 'new')        
+        self.user_login.grid(column = 0, row = 2, padx = 0, pady = (50,0), sticky = 'new')        
 
         self.feedback_message = ctk.CTkLabel(master = self, text = '')
-        self.feedback_message.grid(column = 0, row = 2, padx = 0, pady = (10, 0), sticky = 'new')
+        self.feedback_message.grid(column = 0, row = 3, padx = 0, pady = (10, 0), sticky = 'new')
 
         self.variable_filter = RecordingsFilterView(self, controller = self.controller, variables = variables)
-        self.variable_filter.grid(column = 0, row = 4, padx = 10, pady = (10,0), sticky = 'sew')
+        self.variable_filter.grid(column = 0, row = 5, padx = 10, pady = (10,0), sticky = 'sew')
 
         self.load_session = LoadSessionView(master = self, controller = self.controller, users = self.users)
-        self.load_session.grid(column = 0, row = 5, padx = 10, pady = 10, sticky = 'sew')
+        self.load_session.grid(column = 0, row = 6, padx = 10, pady = 10, sticky = 'sew')
+
+    def print_validation_message(self, message: str):
+        self.feedback_message.configure(text = message, text_color = '#30693b')
+
+    def print_error_message(self, message: str):
+        self.feedback_message.configure(text = message, text_color = '#8d2929')
+
+    def launch_pretest(self):
+        self.controller.launch_pretest()
