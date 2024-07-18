@@ -14,6 +14,9 @@ class LoginController():
     def filter_variables(self, variables: dict):
         self.variables = variables
 
+    def launch_pretest(self):
+        self.app_controller.launch_pretest()
+
     def load_session(self, user_id):
         self.app_controller.complete_user_registration(user_id, self.variables)
 

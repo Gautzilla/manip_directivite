@@ -1,7 +1,7 @@
 from src.model.app_model import AppModel
 from src.view.app_view import AppView
 from src.controller.login_controller import LoginController
-from src.controller.ratings_controller import TestRatingsController
+from src.controller.ratings_controller import PretestRatingsController, TestRatingsController
 
 
 class AppController():
@@ -27,3 +27,7 @@ class AppController():
     def end_test(self):
         self.view.close_ratings_view()
         self.view.show_test_end()
+
+    def launch_pretest(self):
+        self.view.close_login_view()
+        pretest_ratings_controller = PretestRatingsController(app_controller = self, app_view = self.view)

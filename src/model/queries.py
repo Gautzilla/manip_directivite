@@ -110,5 +110,12 @@ def get_unrated_recordings(user_id: int, session) -> list:
 def get_recording(id, session) -> Recording:
     return session.query(Recording).filter(Recording.id == id).first()
 
+def get_pretest_recording(session, room_name: str, sentence_amplitude: str, distance: int, angle: str, movement: bool, source: str) -> Recording:
+    try:
+        query = session.query(Recording).first()
+        return query
+    except:
+        return None
+
 def write_ratings(rating, session):
     session.add(rating)
