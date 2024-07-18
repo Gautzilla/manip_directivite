@@ -9,7 +9,7 @@ class LoginController():
         users = get_uncomplete_users()
         self.variables = get_variables()
         self.login_view = self.app_view.show_login(controller = self, users = users, variables = self.variables)
-        self.app_view.set_binding('<Return>', lambda _ : self.login_view.submit())
+        self.app_view.set_binding('<Return>', lambda _ : self.login_view.user_login.submit())
 
     def filter_variables(self, variables: dict):
         self.variables = variables
