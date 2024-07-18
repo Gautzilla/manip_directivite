@@ -31,3 +31,7 @@ class AppController():
     def launch_pretest(self):
         self.view.close_login_view()
         pretest_ratings_controller = PretestRatingsController(app_controller = self, app_view = self.view)
+
+    def close_pretest(self):
+        self.view.close_ratings_view()
+        login_controller = LoginController(app_controller = self, app_view = self.view)

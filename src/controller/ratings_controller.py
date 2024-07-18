@@ -80,8 +80,7 @@ class PretestRatingsController(RatingsController):
 
     def load_next_recording(self):
         if self.nb_rated_recordings >= len(self.recordings):
-            # TODO: END PRETEST
-            print('END PRETEST')
+            self.app_controller.close_pretest()
             return
         self.recording = self.recordings[self.nb_rated_recordings]
         super().load_next_recording()
