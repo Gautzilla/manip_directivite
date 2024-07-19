@@ -143,7 +143,7 @@ class RatingsView(ctk.CTkFrame):
             direct_question.reset()
 
     def disable_validate_button(self, sound_duration_ms: int):
-        self.validate_btn.configure(state = 'disabled')
+        self.validate_btn.configure(state = 'disabled', fg_color = "gray25")
         self.done_playing = False
         self.after(sound_duration_ms, self.end_sound_play)
 
@@ -159,7 +159,7 @@ class RatingsView(ctk.CTkFrame):
             return
         if not self.done_answering:
             return
-        self.validate_btn.configure(state = 'normal')
+        self.validate_btn.configure(state = 'normal', fg_color = "#1f538d")
 
     def display_text(self, text: str):
         self.top_text.configure(text = text)
