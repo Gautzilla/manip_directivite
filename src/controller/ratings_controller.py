@@ -8,8 +8,16 @@ from abc import ABC, abstractmethod
 class RatingsController(ABC):
 
     @abstractmethod
-    def __init__(self, app_controller, app_view: AppView, variables: dict = None, user_id: int = None):
+    def __init__(self, app_view: AppView):
+        self.ratings_view.display_text(text = 'Appuyer sur ENTREE pour démarrer le test.')
+        self.app_view.set_binding('<Return>', lambda _ : self.start_test())
         pass
+
+    @abstractmethod
+    def start_test(self):
+        self.app_view.set_binding('<Return>', lambda _ : self.ratings_view.validate())
+        self.ratings_view.display_text(text = '')
+        self.load_next_recording()
 
     @abstractmethod
     def load_next_recording(self):
@@ -48,8 +56,10 @@ class TestRatingsController(RatingsController):
 
         filter_recordings(variables)
         self.ratings_view = self.app_view.show_ratings(controller = self)
-        self.app_view.set_binding('<Return>', lambda _ : self.ratings_view.validate())
-        self.load_next_recording()
+        super().__init__(app_view = self.app_view)
+
+    def start_test(self):
+        super().start_test()
 
     def load_next_recording(self):
         self.recording = get_next_recording(user_id = self.user_id)
@@ -75,8 +85,10 @@ class PretestRatingsController(RatingsController):
         self.nb_rated_recordings = 0
         self.recordings = get_pretest_recordings()
         self.ratings_view = self.app_view.show_ratings(controller = self)
-        self.app_view.set_binding('<Return>', lambda _ : self.ratings_view.validate())
-        self.load_next_recording()
+        super().__init__(app_view = self.app_view)
+
+    def start_test(self):
+        super().start_test()
 
     def load_next_recording(self):
         if self.nb_rated_recordings >= len(self.recordings):

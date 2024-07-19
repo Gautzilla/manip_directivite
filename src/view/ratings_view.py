@@ -88,8 +88,11 @@ class RatingsView(ctk.CTkFrame):
         self.copy_image = Image.open(path.join(ASSETS_FOLDER,'copy_to_clipboard.png'))
         self.copy_image_done = Image.open(path.join(ASSETS_FOLDER,'copy_to_clipboard_done.png'))
 
-        self.text_variable = ctk.StringVar(value = '')
+        self.bottom_text_variable = ctk.StringVar(value = '')
         self.copy_text_image = ctk.CTkImage(light_image = self.copy_image, dark_image = self.copy_image, size = (22, 28))
+
+        self.top_text = ctk.CTkLabel(master = self, text_color = '#00966b', text = '')
+        self.top_text.grid_configure(row = 0, column = 0, columnspan = 4, padx = 10, pady = (10,0), sticky = 'new')
 
         self.timbre_rating = Rating(master = self, attribute_name = 'Timbre')
         self.timbre_rating.grid_configure(row = 1, column = 1, padx = (20,0), pady = (10,0), sticky = 'new')
@@ -111,8 +114,8 @@ class RatingsView(ctk.CTkFrame):
         self.progress_bar = ctk.CTkProgressBar(master = self)
         self.progress_bar.grid_configure(row = 5, column = 0, columnspan = 4, padx = 0, pady = (10,0), sticky = 'new')
 
-        self.text_display = ctk.CTkButton(master = self, textvariable = self.text_variable, text_color = '#8d2929', fg_color = 'gray20', hover = False, image = self.copy_text_image, command = self.copy_text, width = 500)
-        self.text_display.grid_configure(row = 6, column = 0, columnspan = 4, padx = 0, pady = (10,0), sticky = 'sew')
+        self.bottom_text_display = ctk.CTkButton(master = self, textvariable = self.bottom_text_variable, text_color = '#8d2929', fg_color = 'gray20', hover = False, image = self.copy_text_image, command = self.copy_text, width = 500)
+        self.bottom_text_display.grid_configure(row = 6, column = 0, columnspan = 4, padx = 0, pady = (10,0), sticky = 'sew')
 
     def check_all_direct_questions_answered(self):
         for direct_question in self.direct_questions:
@@ -158,17 +161,20 @@ class RatingsView(ctk.CTkFrame):
             return
         self.validate_btn.configure(state = 'normal')
 
+    def display_text(self, text: str):
+        self.top_text.configure(text = text)
+
     def display_soundfile_error(self, soundfile: str):
         self.validate_btn.configure(state = 'disabled')
-        self.text_variable.set(f'Impossible d\'ouvrir {soundfile}')
-        self.text_display.configure(text_color = '#8d2929')
+        self.bottom_text_variable.set(f'Impossible d\'ouvrir {soundfile}')
+        self.bottom_text_display.configure(text_color = '#8d2929')
 
     def display_soundfile_name(self, soundfile: str):
-        self.text_variable.set(soundfile)
-        self.text_display.configure(text_color = 'gray10')
+        self.bottom_text_variable.set(soundfile)
+        self.bottom_text_display.configure(text_color = 'gray10')
         self.copy_text_image.configure(light_image = self.copy_image, dark_image = self.copy_image)
 
     def copy_text(self):
-        pyperclip.copy(self.text_variable.get())
-        self.text_display.configure(text_color = 'gray10')
+        pyperclip.copy(self.bottom_text_variable.get())
+        self.bottom_text_display.configure(text_color = 'gray10')
         self.copy_text_image.configure(light_image = self.copy_image_done, dark_image = self.copy_image_done)
