@@ -138,8 +138,8 @@
     "CTkFont": {
       "macOS": {
         "family": "SF Display",
-        "size": 13,
-        "weight": "normal"
+        "size": 16,
+        "weight": "bold"
       },
       "Windows": {
         "family": "Calibri",
@@ -148,8 +148,8 @@
       },
       "Linux": {
         "family": "Roboto",
-        "size": 13,
-        "weight": "normal"
+        "size": 16,
+        "weight": "bold"
       }
     }
   }
