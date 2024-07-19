@@ -141,7 +141,7 @@ class LoginView(ctk.CTkFrame):
 
         self.grid_rowconfigure((0,4), weight = 1)
 
-        self.pretest_btn = ctk.CTkButton(master = self, text = 'PRETEST', hover = False, font = ('Consolas', 16, 'bold'), text_color = '#00966b', fg_color = 'grey25', command = self.launch_pretest)
+        self.pretest_btn = ctk.CTkButton(master = self, text = 'PRETEST', hover = False, text_color = '#00966b', fg_color = 'grey25', command = self.launch_pretest)
         self.pretest_btn.grid(column = 0, row = 1, padx = 0, pady = (10,0), sticky = 'new')  
 
         self.user_login = UserCreation(master = self, controller = self.controller)
