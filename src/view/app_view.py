@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from src.view.login_view import LoginView
 from src.view.ratings_view import RatingsView
+from os import path
 
 class AppView(ctk.CTk):
 
@@ -8,6 +9,7 @@ class AppView(ctk.CTk):
         super().__init__()
 
         ctk.set_appearance_mode("dark")
+        ctk.set_default_color_theme(path.abspath(r'src/theme.json'))
 
         self.title('MANIP')
         self.after(0, lambda:self.state('zoomed'))        

@@ -111,7 +111,7 @@ class RatingsView(ctk.CTkFrame):
         self.progress_bar = ctk.CTkProgressBar(master = self)
         self.progress_bar.grid_configure(row = 5, column = 0, columnspan = 4, padx = 0, pady = (10,0), sticky = 'new')
 
-        self.text_display = ctk.CTkButton(master = self, textvariable = self.text_variable, text_color = '#8d2929', fg_color = 'gray20', hover = False, image = self.copy_text_image, command = self.copy_text, width = 400)
+        self.text_display = ctk.CTkButton(master = self, textvariable = self.text_variable, text_color = '#8d2929', fg_color = 'gray20', hover = False, image = self.copy_text_image, command = self.copy_text, width = 500)
         self.text_display.grid_configure(row = 6, column = 0, columnspan = 4, padx = 0, pady = (10,0), sticky = 'sew')
 
     def check_all_direct_questions_answered(self):
