@@ -8,7 +8,7 @@ class AppController():
 
     def __init__(self):
         self.model = AppModel()
-        self.view = AppView(self)
+        self.view = AppView()
 
     def initialize_app(self, initialize_db: bool):
 
