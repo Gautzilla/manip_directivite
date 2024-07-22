@@ -1,4 +1,5 @@
 import customtkinter as ctk
+from src import DEV
 
 class UserCreation(ctk.CTkFrame):
     def __init__(self, master, controller):
@@ -155,6 +156,13 @@ class LoginView(ctk.CTkFrame):
 
         self.load_session = LoadSessionView(master = self, controller = self.controller, users = self.users)
         self.load_session.grid(column = 0, row = 6, padx = 10, pady = 10, sticky = 'sew')
+
+        self.dev_features()
+
+    def dev_features(self):
+        if DEV :
+            return
+        self.variable_filter.grid_remove()
 
     def print_validation_message(self, message: str):
         self.feedback_message.configure(text = message, text_color = '#30693b')

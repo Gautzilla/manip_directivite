@@ -1,6 +1,7 @@
 from src.model.login_model import register_user as register_user_model, get_uncomplete_users
 from src.model.db_constants_filler import get_variables
 from src.view.app_view import AppView
+from src import DEV
 
 class LoginController():
     def __init__(self, app_controller, app_view: AppView):
@@ -12,6 +13,8 @@ class LoginController():
         self.app_view.set_binding('<Return>', lambda _ : self.login_view.user_login.submit())
 
     def filter_variables(self, variables: dict):
+        if not DEV:
+            return
         self.variables = variables
 
     def launch_pretest(self):
