@@ -2,7 +2,7 @@ import customtkinter as ctk
 from os import path
 import pyperclip
 from PIL import Image
-from src import ASSETS_FOLDER
+from src import ASSETS_FOLDER, DEV
 
 class Rating(ctk.CTkFrame):
     def __init__(self, master, attribute_name):
@@ -116,6 +116,13 @@ class RatingsView(ctk.CTkFrame):
 
         self.bottom_text_display = ctk.CTkButton(master = self, textvariable = self.bottom_text_variable, text_color = '#8d2929', fg_color = 'gray20', hover = False, image = self.copy_text_image, command = self.copy_text, width = 500)
         self.bottom_text_display.grid_configure(row = 6, column = 0, columnspan = 4, padx = 0, pady = (10,0), sticky = 'sew')
+
+        self.dev_features()
+
+    def dev_features(self):
+        if DEV:
+            return
+        self.bottom_text_display.configure(text = '') # Hides the filename if not under dev conditions
 
     def check_all_direct_questions_answered(self):
         for direct_question in self.direct_questions:
