@@ -128,7 +128,6 @@ class RatingsView(ctk.CTkFrame):
         for direct_question in self.direct_questions:
             answer = direct_question.get_answer()
             self.answers[answer[0]] = answer[1]
-
         if None in self.answers.values():
             return
         self.done_answering = True
@@ -142,6 +141,7 @@ class RatingsView(ctk.CTkFrame):
 
     def reset(self, direct_question_names: list):
         self.answers = {}
+        self.done_answering = False
         for slider in (self.timbre_rating, self.plausibility_rating):
             slider.reset()
         for name in direct_question_names:
